@@ -1,6 +1,18 @@
 # Repo de Cero
 
+## Antes de comenzar es necesario:
+
+1. [Instalar servidor de mongoDB](https://www.mongodb.com/try/download/community) para poder ejecutar la base de datos localmente.
+2. [Instalar MongoDB Compass](https://www.mongodb.com/try/download/compass) herramienta gráfica oficial proporcionada por MongoDB para interactuar con bases de datos.
+
+## Instala las dependencias Node del proyecto.
+´npm install´
+
+## Levanta la aplicacion localmente.
+´npm start´
+
 # Repositorio semilla: API NodeJS :seedling:
+
 
 > Este repositorio es un fork de [otro que está en la organización surprograma](https://github.com/surprograma/nodejs-api-seed).
 > El original es uno de los repositorios que se usan en la serie de videos **Tu primera aplicación full stack: NodeJS + React**, [disponible en YouTube](https://www.youtube.com/playlist?list=PL7q-McYJyHlgVGQIRYVKl381twyJ4XM_h).
