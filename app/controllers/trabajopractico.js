@@ -1,10 +1,10 @@
-const model = require("../models/persona");
+const model = require("../models/trabajopractico");
 
 exports.getData = async (req, res) => {
   try {
-    const arrayPersonas = await model.find();
-    console.log(arrayPersonas);
-    res.send({ arrayPersonas });
+    const arrayTps = await model.find();
+    console.log(arrayTps);
+    res.send({ arrayTps });
   } catch (error) {
     console.log(`Ocurrio un error: ${error}`);
   }
@@ -18,7 +18,7 @@ exports.insertData = async (req, res) => {
     res.status(201).json(response);
   } catch (error) {
     console.log(
-      "Ocurrio un error al insertar un elemento en la tabla Persona: ",
+      "Ocurrio un error al insertar un elemento en la tabla TrabajoPractico: ",
       error
     );
     res.send({ error: "Error" }, 422);
