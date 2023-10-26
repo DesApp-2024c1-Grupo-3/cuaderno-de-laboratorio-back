@@ -1,7 +1,9 @@
 const express = require("express");
 const app = express();
 const initDb = require("./config/db");
-const personaRouter = require('./app/routes/persona');
+const profesorRouter = require('./app/routes/profesor');
+const tpRouter = require('./app/routes/trabajopractico');
+const cursoRouter = require('./app/routes/curso');
 
 const port = "3000";
 
@@ -12,6 +14,8 @@ app.listen(port, () => {
 app.use(express.json());
 
 // Usa el enrutador de Persona.js para manejar las rutas definidas en ese archivo
-app.use(personaRouter);
+app.use(profesorRouter);
+app.use(tpRouter);
+app.use(cursoRouter);
 
 initDb();
