@@ -6,4 +6,6 @@ router.get('/cursos', controller.getData);
 
 router.post('/curso', controller.insertData);
 
+router.get('/curso/:cursoId/alumnos', controller.getAlumnosByCursoId);
+
 module.exports = router;
