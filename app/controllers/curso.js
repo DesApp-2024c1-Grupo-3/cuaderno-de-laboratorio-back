@@ -25,3 +25,21 @@ exports.insertData = async (req, res) => {
   }
 };
 
+// Obtener cursos de un profesor por su ID
+exports.getAlumnosByCursoId = async (req, res) => {
+  const cursoId = req.params.cursoId;
+
+  try {
+    // Busca al profesor por su ID
+    const curso = await model.findById(cursoId).populate('alumnos');
+
+    // Si se encontró al profesor, obtén la lista de cursos
+    const alumnos = curso.alumnos;
+
+    res.json({ alumnos });
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ error: `Error al obtener los alumnos para un curso ${cursoId}` });
+  }
+};
+
