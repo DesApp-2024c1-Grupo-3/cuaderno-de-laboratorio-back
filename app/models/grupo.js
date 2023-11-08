@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const grupoSchema = new Schema(
   {
-    nobmre: String,
+    nombre: String,
     alumnos: [
       {
         type: Schema.Types.ObjectId,
