@@ -5,6 +5,7 @@ const profesorRouter = require('./app/routes/profesor');
 const alumnoRouter = require('./app/routes/alumno');
 const tpRouter = require('./app/routes/trabajopractico');
 const cursoRouter = require('./app/routes/curso');
+const grupoRouter = require('./app/routes/grupo');
 
 const port = "3000";
 
@@ -19,5 +20,6 @@ app.use(profesorRouter);
 app.use(alumnoRouter);
 app.use(tpRouter);
 app.use(cursoRouter);
+app.use(grupoRouter);
 
 initDb();

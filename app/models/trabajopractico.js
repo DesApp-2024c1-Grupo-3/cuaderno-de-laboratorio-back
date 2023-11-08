@@ -8,7 +8,12 @@ const trabajoPracticoSchema = new Schema(
     fechaInicio: Date,
     fechaFin: Date,
     grupal: Boolean,
-    // grupos
+    grupos: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Grupo",
+      },
+    ],
     // secciones
     // cursos
   },
