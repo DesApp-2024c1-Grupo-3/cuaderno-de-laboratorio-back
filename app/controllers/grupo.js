@@ -1,6 +1,7 @@
 const model = require("../models/grupo");
 const mongoose = require('mongoose');
 
+
 exports.getData = async (req, res) => {
   try {
     const arrayGrupos = await model.find();
@@ -25,6 +26,7 @@ exports.insertData = async (req, res) => {
     res.send({ error: "Error" }, 422);
   }
 };
+
 
 
 //actualizar lista Alumnos De un grupo Por Id
@@ -64,9 +66,6 @@ exports.actualizarListaAlumnos = async (req, res) => {
     res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
-
-
-
 
 
 
