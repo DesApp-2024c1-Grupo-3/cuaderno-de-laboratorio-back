@@ -7,7 +7,7 @@ const tpRouter = require('./app/routes/trabajopractico');
 const cursoRouter = require('./app/routes/curso');
 const grupoRouter = require('./app/routes/grupo');
 
-const port = "3000";
+const port = "8080";
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
