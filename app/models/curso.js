@@ -13,7 +13,10 @@ const cursoSchema = new Schema(
         ref: "Alumno",
       },
     ],
-    //materia
+    materia: {
+      type: Schema.Types.ObjectId,
+      ref: 'Materia',
+    },
   },
   {
     versionKey: false,
