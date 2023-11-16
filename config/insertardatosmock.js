@@ -4,6 +4,7 @@ const Profesor = require("../app/models/profesor");
 const Curso = require("../app/models/curso");
 const Alumno = require("../app/models/alumno");
 const Grupo = require("../app/models/grupo");
+const Materia = require("../app/models/materia");
 
 const scope = "local";
 const uri = `mongodb://localhost:27017/${scope}`;
@@ -24,7 +25,7 @@ mongoose
 async function createData() {
   try {
     // Colecciones a limpiar
-    const collections = [Alumno, Profesor, Curso, Grupo, TrabajoPractico];
+    const collections = [Alumno, Profesor, Curso, Grupo, TrabajoPractico, Materia];
 
     // Limpiar todas las colecciones
     for (const collection of collections) {
@@ -76,13 +77,23 @@ async function createData() {
 
     // Crear Curso con los 10 Alumnos
     const curso = new Curso({
-      comision: "A1",
+      comision: "Curso 1 - prueba",
       horario: "Lunes y Miércoles, 8:00 AM - 10:00 AM",
       fechaInicio: new Date(),
       fechaFin: new Date(),
       alumnos: alumnos,
     });
     await curso.save();
+
+    // Crear Curso con los 10 Alumnos
+    const curso2 = new Curso({
+      comision: "Curso 2 - prueba ",
+      horario: "Martes y Jueves, 8:00 AM - 10:00 AM",
+      fechaInicio: new Date(),
+      fechaFin: new Date(),
+      alumnos: alumnos.slice(0,5),
+    });
+    await curso2.save();
 
     // Crear Profesores
     const profesorConCurso = new Profesor({
@@ -125,6 +136,34 @@ async function createData() {
       profesores: [profesorConCurso, profesorSinCurso],
     });
     await trabajoPractico.save();
+
+    // Crear Trabajo Práctico con los 2 Profesores
+    const trabajoPractico2 = new TrabajoPractico({
+      nombre: "Trabajo Práctico 2",
+      calificacion: 10, // Calificación inicial
+      fechaInicio: new Date(),
+      fechaFin: new Date(),
+      grupal: false,
+      profesores: [profesorConCurso],
+    });
+    await trabajoPractico.save();
+
+    // Crear Materia
+    const materia = new Materia({
+      nombre: "Matemáticas",
+      cursos: [curso, curso2]
+    });
+    await materia.save();
+
+    // Asignar los Trabajos Prácticos al Curso
+    curso.materia = materia;
+    await curso.save();
+
+    // Asignar los Trabajos Prácticos al Curso
+    curso.tps = [trabajoPractico, trabajoPractico2];
+    await curso.save();
+
+
     console.log("Datos nuevos insertados correctamente.");
   } catch (error) {
     console.error("Ocurrió un error al insertar los datos:", error);

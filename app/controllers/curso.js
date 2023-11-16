@@ -1,6 +1,6 @@
 const Materia = require('../models/materia');
 const Curso = require('../models/curso');
-const mongoose = require('mongoose');
+
 
 exports.getData = async (req, res) => {
   try {
@@ -51,15 +51,15 @@ exports.insertData = async (req, res) => {
 };
 
 
-// Obtener cursos de un profesor por su ID
+// Obtener alumnos de un curso por su ID
 exports.getAlumnosByCursoId = async (req, res) => {
   const cursoId = req.params.cursoId;
 
   try {
-    // Busca al profesor por su ID
+    // Busca al curso por su ID
     const curso = await Curso.findById(cursoId).populate('alumnos');
 
-    // Si se encontró al profesor, obtén la lista de cursos
+    // Si se encontró al curso, obtén la lista de alumnos
     const alumnos = curso.alumnos;
 
     res.json({ alumnos });
@@ -68,4 +68,23 @@ exports.getAlumnosByCursoId = async (req, res) => {
     res.status(404).json({ error: `Error al obtener los alumnos para un curso ${cursoId}` });
   }
 };
+
+// Obtener tps de un curso por su ID
+exports.getTpsByCursoId = async (req, res) => {
+  const cursoId = req.params.cursoId;
+
+  try {
+    // Busca al profesor por su ID
+    const curso = await Curso.findById(cursoId).populate('tps');
+
+    // Si se encontró al curso, obtén la lista de tps
+    const tps = curso.tps;
+
+    res.json({ tps });
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ error: `Error al obtener los tps para un curso ${cursoId}` });
+  }
+};
+
 
