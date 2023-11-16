@@ -17,6 +17,12 @@ const cursoSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Materia',
     },
+    tps: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "trabajopractico",
+      },
+    ]
   },
   {
     versionKey: false,
