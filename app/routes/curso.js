@@ -8,4 +8,6 @@ router.post('/curso', controller.insertData);
 
 router.get('/curso/:cursoId/alumnos', controller.getAlumnosByCursoId);
 
+router.get("/curso/:cursoId/tps", controller.getTpsByCursoId);
+
 module.exports = router;
