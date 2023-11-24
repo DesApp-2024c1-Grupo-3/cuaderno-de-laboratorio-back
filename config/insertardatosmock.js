@@ -25,7 +25,14 @@ mongoose
 async function createData() {
   try {
     // Colecciones a limpiar
-    const collections = [Alumno, Profesor, Curso, Grupo, TrabajoPractico, Materia];
+    const collections = [
+      Alumno,
+      Profesor,
+      Curso,
+      Grupo,
+      TrabajoPractico,
+      Materia,
+    ];
 
     // Limpiar todas las colecciones
     for (const collection of collections) {
@@ -44,7 +51,7 @@ async function createData() {
       "David",
       "Claudia",
       "Pedro",
-      "Sofía"
+      "Sofía",
     ];
 
     const apellidos = [
@@ -57,11 +64,13 @@ async function createData() {
       "González",
       "Sánchez",
       "Ramírez",
-      "Torres"
+      "Torres",
     ];
     for (let i = 1; i <= 10; i++) {
-      const nombreAleatorio = nombres[Math.floor(Math.random() * nombres.length)];
-      const apellidoAleatorio = apellidos[Math.floor(Math.random() * apellidos.length)];
+      const nombreAleatorio =
+        nombres[Math.floor(Math.random() * nombres.length)];
+      const apellidoAleatorio =
+        apellidos[Math.floor(Math.random() * apellidos.length)];
 
       const email = `${nombreAleatorio.toLowerCase()}${apellidoAleatorio.toLowerCase()}@example.com`;
 
@@ -91,7 +100,7 @@ async function createData() {
       horario: "Martes y Jueves, 8:00 AM - 10:00 AM",
       fechaInicio: new Date(),
       fechaFin: new Date(),
-      alumnos: alumnos.slice(0,5),
+      alumnos: alumnos.slice(0, 5),
     });
     await curso2.save();
 
@@ -101,7 +110,7 @@ async function createData() {
       apellido: "Castillo",
       dni: 12345678,
       email: "pablocastillo@example.com",
-      cursos: [curso]
+      cursos: [curso, curso2],
     });
     await profesorConCurso.save();
 
@@ -151,17 +160,28 @@ async function createData() {
     // Crear Materia
     const materia = new Materia({
       nombre: "Matemáticas",
-      cursos: [curso, curso2]
+      cursos: [curso, curso2],
     });
     await materia.save();
 
+    // Crear Materia
+    const materia2 = new Materia({
+      nombre: "Biologia",
+      cursos: [curso, curso2],
+    });
+    await materia2.save();
+
     // Asignar los Trabajos Prácticos al Curso
     curso.materia = materia;
+    curso2.materia = materia2;
     await curso.save();
+    await curso2.save();
 
     // Asignar los Trabajos Prácticos al Curso
     curso.tps = [trabajoPractico, trabajoPractico2];
+    curso2.tps = [trabajoPractico, trabajoPractico2,trabajoPractico, trabajoPractico2];
     await curso.save();
+    await curso2.save();
 
 
     console.log("Datos nuevos insertados correctamente.");
