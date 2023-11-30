@@ -141,8 +141,8 @@ async function createData() {
       calificacion: 0, // Calificación inicial
       fechaInicio: new Date(),
       fechaFin: new Date(),
-      grupal: false,
-      profesores: [profesorConCurso, profesorSinCurso],
+      grupal: true,
+      grupos: [grupo1, grupo2],
     });
     await trabajoPractico.save();
 
@@ -152,10 +152,10 @@ async function createData() {
       calificacion: 10, // Calificación inicial
       fechaInicio: new Date(),
       fechaFin: new Date(),
-      grupal: false,
-      profesores: [profesorConCurso],
+      grupal: true,
+      grupos: [grupo1],
     });
-    await trabajoPractico.save();
+    await trabajoPractico2.save();
 
     // Crear Materia
     const materia = new Materia({

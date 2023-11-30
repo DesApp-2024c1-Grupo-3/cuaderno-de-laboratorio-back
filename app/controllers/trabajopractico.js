@@ -85,3 +85,49 @@ exports.updateAlumnosEnGrupo = async (req, res) => {
     res.status(500).json({ mensaje: 'Error interno del servidor' });
   }
 };
+
+// Función para eliminar un Tp por su ID
+exports.deleteTp = async (req, res) => {
+  const tpId  = req.params.tpId;
+  try {
+    const deletedTp = await model.findByIdAndDelete(tpId);
+
+    if (!deletedTp) {
+      return res.status(404).json({ error: "Tp no encontrado" });
+    }
+
+    res.status(200).json({ message: "Tp eliminado exitosamente", deletedTp });
+  } catch (error) {
+    console.error('Error al eliminar el Tp:', error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+// Obtener grupos de un trabajo práctico por su ID
+exports.getGruposByTpId = async (req, res) => {
+  const tpId = req.params.tpId;
+
+  try {
+    // Busca al tp por su ID y popula la lista de grupos con los datos completos de los alumnos
+    const trabajoPractico = await model.findById(tpId).populate({
+      path: 'grupos',
+      populate: {
+        path: 'alumnos',
+        model: 'Alumno',
+      },
+    });
+
+    if (!trabajoPractico) {
+      return res.status(404).json({ error: `No se encontró el trabajo práctico con ID ${tpId}` });
+    }
+
+    // Si se encontró al tp, obtén la lista de grupos sino una lista vacia
+    const grupos = trabajoPractico.grupos || [];
+
+    res.json({ grupos });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: `Error al obtener los grupos para el trabajo práctico con ID ${tpId}` });
+  }
+};
+
