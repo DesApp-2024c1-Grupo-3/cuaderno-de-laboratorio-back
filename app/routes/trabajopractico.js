@@ -10,4 +10,9 @@ router.get('/tp/:tpId/grupos', controller.getGruposByTpId);
 
 router.put('/tp/:tpId/grupos/:grupoId', controller.updateAlumnosEnGrupo);
 
+router.delete('/tp/:tpId', controller.deleteTp);
+
+router.get('/tps/:tpId/grupos', controller.getGruposByTpId);
+
+
 module.exports = router;
