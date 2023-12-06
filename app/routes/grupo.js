@@ -8,4 +8,7 @@ router.post('/grupo', controller.insertData);
 
 router.put('/grupos/:grupoId/alumnos', controller.actualizarListaAlumnos);
 
+router.delete('/grupo/:grupoId', controller.deleteGrupo);
+
+
 module.exports = router;

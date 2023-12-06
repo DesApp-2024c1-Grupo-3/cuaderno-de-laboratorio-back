@@ -134,6 +134,11 @@ async function createData() {
       alumnos: alumnos.slice(5, 10),
     });
     await grupo2.save();
+    const grupo3 = new Grupo({
+      nombre: "Grupo 3",
+      alumnos: alumnos.slice(5, 10),
+    });
+    await grupo3.save();
 
     // Crear Trabajo Práctico con los 2 Profesores
     const trabajoPractico = new TrabajoPractico({
@@ -183,7 +188,13 @@ async function createData() {
     await curso.save();
     await curso2.save();
 
-
+    grupo1.curso = curso;
+    grupo2.curso = curso2;
+    grupo3.curso = curso2;
+    await grupo1.save();
+    await grupo2.save();
+    await grupo3.save();
+    
     console.log("Datos nuevos insertados correctamente.");
   } catch (error) {
     console.error("Ocurrió un error al insertar los datos:", error);
