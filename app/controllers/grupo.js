@@ -67,5 +67,22 @@ exports.actualizarListaAlumnos = async (req, res) => {
   }
 };
 
+// Función para eliminar un Tp por su ID
+exports.deleteGrupo = async (req, res) => {
+  const grupoId  = req.params.grupoId;
+  try {
+    const deletedGrupo = await model.findByIdAndDelete(grupoId);
+
+    if (!deletedGrupo) {
+      return res.status(404).json({ error: "Grupo no encontrado" });
+    }
+
+    res.status(200).json({ message: "Grupo eliminado exitosamente", deletedGrupo });
+  } catch (error) {
+    console.error('Error al eliminar el Grupo:', error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
 
 

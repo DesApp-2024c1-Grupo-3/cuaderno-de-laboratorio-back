@@ -10,6 +10,10 @@ const grupoSchema = new Schema(
         ref: "Alumno",
       },
     ],
+    curso: {
+      type: Schema.Types.ObjectId,
+      ref: 'Curso',
+    }
   },
   {
     versionKey: false,
