@@ -10,4 +10,9 @@ router.get('/curso/:cursoId/alumnos', controller.getAlumnosByCursoId);
 
 router.get("/curso/:cursoId/tps", controller.getTpsByCursoId);
 
+router.get("/curso/:cursoId/grupos", controller.getGruposByCursoId);
+
+router.post('/grupos/:cursoId', controller.createGrupoForCurso);
+
+
 module.exports = router;

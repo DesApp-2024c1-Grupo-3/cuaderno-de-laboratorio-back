@@ -1,6 +1,6 @@
 const Materia = require('../models/materia');
 const Curso = require('../models/curso');
-
+const Grupo = require('../models/grupo');
 
 exports.getData = async (req, res) => {
   try {
@@ -84,6 +84,41 @@ exports.getTpsByCursoId = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(404).json({ error: `Error al obtener los tps para un curso ${cursoId}` });
+  }
+};
+
+// Controlador para obtener todos los grupos de un curso por su ID
+exports.getGruposByCursoId = async (req, res) => {
+  const cursoId = req.params.cursoId;
+
+  try {
+    // Buscar todos los grupos que pertenecen al curso específico
+    const grupos = await Grupo.find({ curso: cursoId }).populate('alumnos');
+
+    res.json({ grupos });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: `Error al obtener los grupos para el curso con ID ${cursoId}` });
+  }
+};
+
+// Controlador para crear un nuevo grupo asociado a un curso por su ID
+exports.createGrupoForCurso = async (req, res) => {
+  const { nombre, alumnos } = req.body;
+  const cursoId = req.params.cursoId;
+
+  try {
+    // Crea un nuevo grupo
+    const nuevoGrupo = await Grupo.create({
+      nombre: nombre,
+      alumnos: alumnos,
+      curso: cursoId,
+    });
+
+    res.status(201).json({ mensaje: "Grupo creado exitosamente", nuevoGrupo });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al crear el grupo" });
   }
 };
 
