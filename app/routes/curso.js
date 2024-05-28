@@ -6,6 +6,9 @@ router.get('/cursos', controller.getData);
 
 router.post('/curso', controller.insertData);
 
+// Ruta para obtener la información del curso por ID
+router.get('/curso/:id', controller.getCursoById);
+
 router.get('/curso/:cursoId/alumnos', controller.getAlumnosByCursoId);
 
 router.get("/curso/:cursoId/tps", controller.getTpsByCursoId);

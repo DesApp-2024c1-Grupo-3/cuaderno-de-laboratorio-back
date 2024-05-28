@@ -10,5 +10,11 @@ router.get('/profesor/:profesorId/cursos', controller.getCursosByProfesorId);
 
 router.post('/profesor/:profesorId/curso/:cursoId/tp', controller.addTpToCursoByProfesorId);
 
+// Nueva ruta para obtener TPs del cuatrimestre actual
+//router.get('/profesor/:profesorId/cursos/actual/tps', profesorController.getTpsActualesByProfesorId);
+
+// Nueva ruta para obtener TPs del cuatrimestre anterior
+//router.get('/profesor/:profesorId/cursos/anterior/tps', profesorController.getTpsAnterioresByProfesorId);
+
 
 module.exports = router;

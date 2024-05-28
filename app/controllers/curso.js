@@ -50,6 +50,23 @@ exports.insertData = async (req, res) => {
   }
 };
 
+exports.getCursoById = async (req, res) => {
+  const cursoId = req.params.id;
+  try {
+    // Busca al curso por su ID
+    const curso = await Curso.findById(cursoId).populate('materia');
+  
+    const materia = curso.materia.nombre;
+    const comision = curso.comision;
+    // Obtener la comisión y el nombre de la materia del curso
+    
+    res.json({ materia , comision});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: `Error al obtener la información del curso ${cursoId}` });
+  }
+    
+};
 
 // Obtener alumnos de un curso por su ID
 exports.getAlumnosByCursoId = async (req, res) => {
@@ -76,10 +93,8 @@ exports.getTpsByCursoId = async (req, res) => {
   try {
     // Busca al profesor por su ID
     const curso = await Curso.findById(cursoId).populate('tps');
-
-    // Si se encontró al curso, obtén la lista de tps
+    
     const tps = curso.tps;
-
     res.json({ tps });
   } catch (error) {
     console.error(error);
