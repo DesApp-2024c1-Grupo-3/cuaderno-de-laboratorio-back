@@ -39,78 +39,31 @@ async function createData() {
       await collection.deleteMany({});
     }
     console.log("Se eliminaron los registros anteriores correctamente.");
-    // Crear 10 Alumnos
+    
+    // Crear Alumnos
     const alumnos = [];
     const nombres = [
-      "María",
-      "Ana",  
-      "Pedro",
-      "Luisa",,
-      "Jorge",
-      "Marta",
-      "Ricardo",
-      "Elena",
-      "Andrés",
-      "Sofía",
-      "Pablo", 
-      "Julia",
-      "Tomás", 
-      "Gabriela",
-      "Luis",
-      "Clara",
-      "Isabel",        
-      "Juan",
-      "María",
-      "Carlos",
-      "Laura",
-      "José",
-      "Ana",
-      "David",
-      "Claudia",
-      "Pedro",
-      "Sofía",
+      "María", "Ana", "Pedro", "Luisa", "Jorge", "Marta", "Ricardo", 
+      "Elena", "Andrés", "Sofía", "Pablo", "Julia", "Tomás", "Gabriela", 
+      "Luis", "Clara", "Isabel", "Juan", "Carlos", "Laura", "José", "David", 
+      "Claudia"
+    ];
+    const apellidos = [
+      "Ruiz", "García", "Rodríguez", "Pérez", "Fernández", "López", 
+      "Martínez", "González", "Sánchez", "Ramírez", "Torres", "Hernández", 
+      "Flores", "Morales", "Medina", "Rojas", "Gómez", "Díaz", "Mendoza"
     ];
     
-    const apellidos = [
-      "Ruiz",
-      "García",
-      "Rodríguez",
-      "Pérez",
-      "Fernández",
-      "López",
-      "Martínez",
-      "González",
-      "Sánchez",
-      "Ramírez",
-      "Torres",
-      "Hernández",
-      "Flores",
-      "Morales",
-      "Medina",
-      "Rojas",
-      "Gómez",
-      "Díaz",
-      "Mendoza"
-    ];
-    for (let i = 1; i <= 30; i++) {
-      const nombreAleatorio =
-        nombres[Math.floor(Math.random() * nombres.length)];
-      const apellidoAleatorio =
-        apellidos[Math.floor(Math.random() * apellidos.length)];
-
+    for (let i = 0; i < 30; i++) {
+      const nombreAleatorio = nombres[Math.floor(Math.random() * nombres.length)];
+      const apellidoAleatorio = apellidos[Math.floor(Math.random() * apellidos.length)];
       const email = `${nombreAleatorio.toLowerCase()}${apellidoAleatorio.toLowerCase()}@example.com`;
-
-      const alumno = new Alumno({
-        nombre: nombreAleatorio,
-        apellido: apellidoAleatorio,
-        dni: 10000000 + i,
-        email: email,
-      });
+      const alumno = new Alumno({ nombre: nombreAleatorio, apellido: apellidoAleatorio, dni: 10000000 + i, email });
       await alumno.save();
       alumnos.push(alumno);
     }
 
-    // Crear Curso con los 10 Alumnos
+    // Crear Cursos
     const curso = new Curso({
       comision: "Curso 1 - prueba",
       horario: "Lunes y Miércoles, 8:00 AM - 10:00 AM",
@@ -120,9 +73,8 @@ async function createData() {
     });
     await curso.save();
 
-    // Crear Curso con los 10 Alumnos
     const curso2 = new Curso({
-      comision: "Curso 2 - prueba ",
+      comision: "Curso 2 - prueba",
       horario: "Martes y Jueves, 8:00 AM - 10:00 AM",
       fechaInicio: new Date(),
       fechaFin: new Date(),
@@ -148,39 +100,30 @@ async function createData() {
     });
     await profesorSinCurso.save();
 
-    // Crear Grupos con 5 Alumnos cada uno
-    const grupo1 = new Grupo({
-      nombre: "Grupo 1",
-      alumnos: alumnos.slice(0, 5),
-    });
+    // Crear Grupos
+    const grupo1 = new Grupo({ nombre: "Grupo 1", alumnos: alumnos.slice(0, 5), curso });
     await grupo1.save();
 
-    const grupo2 = new Grupo({
-      nombre: "Grupo 2",
-      alumnos: alumnos.slice(5, 10),
-    });
+    const grupo2 = new Grupo({ nombre: "Grupo 2", alumnos: alumnos.slice(5, 10), curso: curso2 });
     await grupo2.save();
-    const grupo3 = new Grupo({
-      nombre: "Grupo 3",
-      alumnos: alumnos.slice(5, 10),
-    });
+
+    const grupo3 = new Grupo({ nombre: "Grupo 3", alumnos: alumnos.slice(10, 15), curso: curso2 });
     await grupo3.save();
 
-    // Crear Trabajo Práctico con los 2 Profesores
-    const trabajoPractico = new TrabajoPractico({
+    // Crear Trabajos Prácticos
+    const trabajoPractico1 = new TrabajoPractico({
       nombre: "Trabajo Práctico 1",
-      calificacion: 0, // Calificación inicial
+      calificacion: 0,
       fechaInicio: new Date(),
       fechaFin: new Date(),
       grupal: true,
       grupos: [grupo1, grupo2],
     });
-    await trabajoPractico.save();
+    await trabajoPractico1.save();
 
-    // Crear Trabajo Práctico con los 2 Profesores
     const trabajoPractico2 = new TrabajoPractico({
       nombre: "Trabajo Práctico 2",
-      calificacion: 10, // Calificación inicial
+      calificacion: 10,
       fechaInicio: new Date(),
       fechaFin: new Date(),
       grupal: true,
@@ -188,39 +131,29 @@ async function createData() {
     });
     await trabajoPractico2.save();
 
-    // Crear Materia
-    const materia = new Materia({
-      nombre: "Matemáticas",
-      cursos: [curso, curso2],
-    });
-    await materia.save();
+    // Crear Materias
+    const materia1 = new Materia({ nombre: "Matemáticas", cursos: [curso, curso2] });
+    await materia1.save();
 
-    // Crear Materia
-    const materia2 = new Materia({
-      nombre: "Biologia",
-      cursos: [curso, curso2],
-    });
+    const materia2 = new Materia({ nombre: "Biología", cursos: [curso, curso2] });
     await materia2.save();
 
-    // Asignar los Trabajos Prácticos al Curso
-    curso.materia = materia;
+    // Asignar Materias a los Cursos
+    curso.materia = materia1;
+    curso.tps = [trabajoPractico1, trabajoPractico2];
+    await curso.save();
+
     curso2.materia = materia2;
-    await curso.save();
+    curso2.tps = [trabajoPractico1, trabajoPractico2];
     await curso2.save();
 
-    // Asignar los Trabajos Prácticos al Curso
-    curso.tps = [trabajoPractico, trabajoPractico2];
-    curso2.tps = [trabajoPractico, trabajoPractico2,trabajoPractico, trabajoPractico2];
-    await curso.save();
-    await curso2.save();
+    // Actualizar Alumnos con Cursos y TPs
+    for (const alumno of alumnos) {
+      alumno.cursos = [curso._id, curso2._id]; // Agrega los cursos a cada alumno
+      alumno.tps = [trabajoPractico1._id, trabajoPractico2._id]; // Agrega los TPs a cada alumno
+      await alumno.save();
+    }
 
-    grupo1.curso = curso;
-    grupo2.curso = curso2;
-    grupo3.curso = curso2;
-    await grupo1.save();
-    await grupo2.save();
-    await grupo3.save();
-    
     console.log("Datos nuevos insertados correctamente.");
   } catch (error) {
     console.error("Ocurrió un error al insertar los datos:", error);
@@ -230,4 +163,3 @@ async function createData() {
     console.log("Conexión a la base de datos cerrada.");
   }
 }
-

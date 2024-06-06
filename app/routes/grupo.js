@@ -4,6 +4,8 @@ const controller = require("../controllers/grupo");
 
 router.get('/grupos', controller.getData);
 
+router.get('/grupo/:grupoId', controller.getGrupoPorId);
+
 router.post('/grupo', controller.insertData);
 
 router.put('/grupos/:grupoId/alumnos', controller.actualizarListaAlumnos);

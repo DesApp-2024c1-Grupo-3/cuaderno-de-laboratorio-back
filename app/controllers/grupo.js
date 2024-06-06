@@ -1,12 +1,22 @@
 const model = require("../models/grupo");
 const mongoose = require('mongoose');
 
-
 exports.getData = async (req, res) => {
   try {
     const arrayGrupos = await model.find();
     console.log(arrayGrupos);
     res.send({ arrayGrupos });
+  } catch (error) {
+    console.log(`Ocurrio un error: ${error}`);
+  }
+};
+exports.getGrupoPorId = async (req, res) => {
+  const grupoId = req.params.grupoId;
+  try {
+    const arrayAlumnos = await model.findById(grupoId).populate('alumnos');
+    const alumnos = arrayAlumnos.alumnos
+    console.log(alumnos);
+    res.json({ alumnos });
   } catch (error) {
     console.log(`Ocurrio un error: ${error}`);
   }
@@ -26,9 +36,6 @@ exports.insertData = async (req, res) => {
     res.send({ error: "Error" }, 422);
   }
 };
-
-
-
 //actualizar lista Alumnos De un grupo Por Id
 exports.actualizarListaAlumnos = async (req, res) => {
   const grupoId = req.params.grupoId;

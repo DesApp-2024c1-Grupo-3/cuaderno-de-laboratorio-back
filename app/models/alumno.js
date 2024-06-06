@@ -7,6 +7,19 @@ const alumnoSchema = new Schema(
     apellido: String,
     dni: Number,
     email: String,
+    // Referencias a la colección 'tps'
+    tps: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "trabajopractico",
+      },
+    ],
+    cursos: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Curso",
+      },
+    ],
   },
   {
     versionKey: false,
