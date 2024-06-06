@@ -27,6 +27,22 @@ exports.insertData = async (req, res) => {
   }
 };
 
+exports.getProfesorPorId = async (req, res) => {
+  const profesorId = req.params.profesorId;
+
+  try {
+    // Busca al profesor por su ID
+    const profesor = await model.findById(profesorId);
+    const nombre = profesor.nombre;
+    const apellido = profesor.apellido;
+
+    res.json({ nombre , apellido });
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ error: `Error al obtener el profesor ${profesorId}` });
+  }
+};
+
 // Obtener cursos de un profesor por su ID
 exports.getCursosByProfesorId = async (req, res) => {
   const profesorId = req.params.profesorId;
