@@ -40,6 +40,7 @@ exports.getCursosByAlumnoId = async (req, res) => {
 
     // Si se encontró al alumno, obtén la lista de cursos
     const cursos = alumno ? alumno.cursos : [];
+
     console.log("Cursos obtenidos para el alumno:", cursos);  // Mensaje de consola para verificar
     res.json({ cursos });
   } catch (error) {
@@ -47,6 +48,23 @@ exports.getCursosByAlumnoId = async (req, res) => {
     res.status(404).json({ error: `Error al obtener los cursos del Alumno ${alumnoId}` });
   }
 };
+exports.getAlumnoById = async (req, res) => {
+  const alumnoId = req.params.alumnoId;
+  try {
+    const alumno = await model.findById(alumnoId);
+
+    if (!alumno) {
+      return res.status(404).json({ error: "Alumno no encontrado" });
+    }
+
+    console.log("Alumno obtenido:", alumno);
+    res.json({ alumno });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener el Alumno" });
+  }
+};
+
 exports.addTpAndCurso = async (req, res) => {
   const { alumnoId } = req.params;
   const { tpId, cursoId } = req.body;

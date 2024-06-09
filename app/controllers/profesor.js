@@ -55,25 +55,21 @@ exports.addTpToCursoByProfesorId = async (req, res) => {
   const profesorId = req.params.profesorId;
   const cursoId = req.params.cursoId;
   const data = req.body;
-
   try {
     // Verificar si el profesor existe
     const profesor = await model.findById(profesorId);
     if (!profesor) {
       return res.status(404).json({ error: `Profesor no encontrado con ID: ${profesorId}` });
     }
-
     // Verificar si el curso pertenece al profesor
     if (!profesor.cursos.includes(cursoId)) {
       return res.status(403).json({ error: `El profesor no tiene acceso al curso con ID: ${cursoId}` });
     }
-
     // Crear el Trabajo Práctico asociado al curso y grupos
     const nuevoTp = await TrabajoPracticoModel.create({
       ...data,
       grupos: data.grupo || [], // Asignar los grupos proporcionados o una matriz vacía si no se proporciona ninguno
     });
-
     // Agregar el Trabajo Práctico al curso
     await CursoModel.findByIdAndUpdate(
       cursoId,
