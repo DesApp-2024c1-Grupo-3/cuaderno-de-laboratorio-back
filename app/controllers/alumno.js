@@ -56,9 +56,12 @@ exports.getAlumnoById = async (req, res) => {
     if (!alumno) {
       return res.status(404).json({ error: "Alumno no encontrado" });
     }
+    const nombre = alumno.nombre;
+    const apellido = alumno.apellido;
+    const dni = alumno.dni;
 
     console.log("Alumno obtenido:", alumno);
-    res.json({ alumno });
+    res.json({ nombre, apellido, dni});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al obtener el Alumno" });
