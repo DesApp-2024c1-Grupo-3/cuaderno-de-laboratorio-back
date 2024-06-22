@@ -8,6 +8,8 @@ router.post('/profesor', controller.insertData);
 
 router.get('/profesor/:profesorId/cursos', controller.getCursosByProfesorId);
 
+router.get('/profesor/:profesorId', controller.getProfesorPorId);
+
 router.post('/profesor/:profesorId/curso/:cursoId/tp', controller.addTpToCursoByProfesorId);
 
 // Nueva ruta para obtener TPs del cuatrimestre actual

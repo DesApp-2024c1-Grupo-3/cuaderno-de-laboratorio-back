@@ -1,23 +1,24 @@
 const Calificacion = require("../models/calificacion");
 
-exports.createCalificacion = async (req, res) => {
-  const { archivosSubidos, comentarioAlumno, devolucionProf, calificacion, tpId, alumnoId, grupoId } = req.body;
-
+exports.insertData = async (req, res) => {
   try {
-    const nuevaCalificacion = new Calificacion({
-      archivosSubidos,
-      comentarioAlumno,
+    const { comentarioAlum, devolucionProf, calificacion, tpId, alumnoId, grupoId } = req.body;
+    const archivos = req.files.map(file => file.filename);
+
+    const calificacionData = {
+      file: archivos,
+      comentarioAlum,
       devolucionProf,
-      calificacion,
+      calificacion: calificacion ? Number(calificacion) : null,
       tpId,
       alumnoId,
       grupoId
-    });
+    };
 
-    await nuevaCalificacion.save();
-    res.status(201).json(nuevaCalificacion);
+    const response = await Calificacion.create(calificacionData);
+    res.status(201).json(response);
   } catch (error) {
-    console.error("Error al crear la calificación:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    console.log("Ocurrió un error al insertar un elemento en la tabla Calificación: ", error);
+    res.status(422).json({ error: "Error" });
   }
 };
