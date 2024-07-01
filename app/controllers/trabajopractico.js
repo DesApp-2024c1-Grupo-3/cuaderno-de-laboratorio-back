@@ -130,4 +130,20 @@ exports.getGruposByTpId = async (req, res) => {
     res.status(500).json({ error: `Error al obtener los grupos para el trabajo práctico con ID ${tpId}` });
   }
 };
+exports.getTpId = async (req, res) => {
+  const tpId = req.params.tpId;
+  
+  try {
+    // Busca un TP por su ID
+    const tp = await model.findOne({ _id: tpId });
 
+    if (!tp) {
+      return res.status(404).json({ error: "Tp no encontrado" });
+    }
+
+    res.json({ tp });
+  } catch (error) {
+    console.error("Error al buscar el TP:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
