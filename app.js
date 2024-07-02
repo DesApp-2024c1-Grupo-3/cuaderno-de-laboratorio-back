@@ -14,12 +14,12 @@ const calificacionRouter  = require('./app/routes/calificacion');
 
 const port = "8080";
 
-app.use(cors()); // Agrega el middleware CORS
+app.use(cors()); 
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
-// Asegúrate de que la carpeta uploads existe
+
 const uploadsDir = path.join(__dirname, 'uploads');
 
 if (!fs.existsSync(uploadsDir)) {
@@ -29,11 +29,11 @@ if (!fs.existsSync(uploadsDir)) {
 
 app.use(express.json());
 
-// Usa el enrutador de Persona.js para manejar las rutas definidas en ese archivo
+
 app.use(profesorRouter);
 app.use(alumnoRouter);
 app.use(tpRouter);
-app.use(cursoRouter);
+app.use(cursoRouter); 
 app.use(grupoRouter);
 app.use(calificacionRouter );
 
