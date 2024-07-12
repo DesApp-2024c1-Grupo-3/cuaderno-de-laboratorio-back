@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const { ObjectId } = mongoose.Types;  
+
 
 const calificacionSchema = new Schema(
   {
@@ -8,9 +8,18 @@ const calificacionSchema = new Schema(
     comentarioAlum: String,
     devolucionProf:String,
     calificacion: Number,
-    tpId: ObjectId, 
-    alumnoId: ObjectId,  
-    grupoId: ObjectId,
+    tpId: {
+      type: Schema.Types.ObjectId,
+      ref: "trabajopractico",
+    },  
+    alumnoId: {
+      type: Schema.Types.ObjectId,
+      ref: "Alumno",
+    }, 
+    grupoId:{
+      type: Schema.Types.ObjectId,
+      ref: "Grupo",
+    },
   },
   {
     versionKey: false,

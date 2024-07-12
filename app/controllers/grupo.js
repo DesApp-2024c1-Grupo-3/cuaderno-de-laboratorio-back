@@ -92,4 +92,41 @@ exports.deleteGrupo = async (req, res) => {
 };
 
 
+exports.actualizarGrupo = async (req, res) => {
+  const grupoId = req.params.grupoId;
+  const { nombre, alumnos } = req.body;
+
+  try {
+    // Verificar si el ID del grupo es válido
+    if (!mongoose.Types.ObjectId.isValid(grupoId)) {
+      return res.status(400).json({ mensaje: 'ID de grupo inválido' });
+    }
+
+    // Verificar si los IDs de los alumnos son válidos
+    const alumnosObjectId = alumnos.map(alumnoId => {
+      if (!mongoose.Types.ObjectId.isValid(alumnoId)) {
+        return res.status(400).json({ mensaje: `ID de alumno inválido: ${alumnoId}` });
+      }
+      return new mongoose.Types.ObjectId(alumnoId);
+    });
+
+    // Actualizar el grupo
+    const grupoActualizado = await model.findByIdAndUpdate(
+      grupoId,
+      { nombre, alumnos: alumnosObjectId },
+      { new: true }
+    );
+
+    // Verificar si el grupo fue encontrado y actualizado
+    if (!grupoActualizado) {
+      return res.status(404).json({ mensaje: 'Grupo no encontrado' });
+    }
+
+    res.status(200).json({ mensaje: 'Grupo actualizado exitosamente', grupoActualizado });
+  } catch (error) {
+    console.error('Error al actualizar el grupo:', error);
+    res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+};
+
 

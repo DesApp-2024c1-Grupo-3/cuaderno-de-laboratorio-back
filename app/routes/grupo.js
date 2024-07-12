@@ -10,6 +10,8 @@ router.post('/grupo', controller.insertData);
 
 router.put('/grupos/:grupoId/alumnos', controller.actualizarListaAlumnos);
 
+router.put('/grupo/:grupoId', controller.actualizarGrupo);
+
 router.delete('/grupo/:grupoId', controller.deleteGrupo);
 
 

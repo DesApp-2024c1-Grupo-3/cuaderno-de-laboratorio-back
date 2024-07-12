@@ -65,7 +65,7 @@ async function createData() {
 
     // Crear Cursos
     const curso = new Curso({
-      comision: "Curso 1 - prueba",
+      comision: "1610",
       horario: "Lunes y Miércoles, 8:00 AM - 10:00 AM",
       fechaInicio: new Date(),
       fechaFin: new Date(),
@@ -73,12 +73,14 @@ async function createData() {
     });
     await curso.save();
 
+    const alumnosSeleccionados = alumnos.slice(5, 15);
+
     const curso2 = new Curso({
-      comision: "Curso 2 - prueba",
+      comision: "1609",
       horario: "Martes y Jueves, 8:00 AM - 10:00 AM",
       fechaInicio: new Date(),
       fechaFin: new Date(),
-      alumnos: alumnos.slice(0, 5),
+      alumnos: alumnosSeleccionados, // seleccionamos 10 de la lista de  alumnos
     });
     await curso2.save();
 
@@ -106,10 +108,7 @@ async function createData() {
 
     const grupo2 = new Grupo({ nombre: "Grupo 2", alumnos: alumnos.slice(5, 10), curso: curso2 });
     await grupo2.save();
-
-    const grupo3 = new Grupo({ nombre: "Grupo 3", alumnos: alumnos.slice(10, 15), curso: curso2 });
-    await grupo3.save();
-
+  
     // Crear Trabajos Prácticos
     const trabajoPractico1 = new TrabajoPractico({
       nombre: "Trabajo Práctico 1",
@@ -117,7 +116,7 @@ async function createData() {
       fechaInicio: new Date(),
       fechaFin: new Date(),
       grupal: true,
-      grupos: [grupo1, grupo2],
+      grupos: [grupo1],
     });
     await trabajoPractico1.save();
 
@@ -127,32 +126,37 @@ async function createData() {
       fechaInicio: new Date(),
       fechaFin: new Date(),
       grupal: true,
-      grupos: [grupo1],
+      grupos: [grupo2],
     });
-    await trabajoPractico2.save();
+    await trabajoPractico2.save(); 
 
     // Crear Materias
-    const materia1 = new Materia({ nombre: "Matemáticas", cursos: [curso, curso2] });
+    const materia1 = new Materia({ nombre: "Matemáticas", cursos: [ curso] });
     await materia1.save();
 
-    const materia2 = new Materia({ nombre: "Biología", cursos: [curso, curso2] });
+    const materia2 = new Materia({ nombre: "Biología", cursos: [curso2] });
     await materia2.save();
 
     // Asignar Materias a los Cursos
     curso.materia = materia1;
-    curso.tps = [trabajoPractico1, trabajoPractico2];
+    //curso.tps = [trabajoPractico1];
     await curso.save();
 
     curso2.materia = materia2;
-    curso2.tps = [trabajoPractico1, trabajoPractico2];
+    //curso2.tps = [ trabajoPractico2];
     await curso2.save();
 
-    // Actualizar Alumnos con Cursos y TPs
+     // Actualizar Alumnos con Cursos y TPs
     for (const alumno of alumnos) {
-      alumno.cursos = [curso._id, curso2._id]; // Agrega los cursos a cada alumno
+      alumno.cursos = [curso._id]; // Agrega los cursos a cada alumno
       alumno.tps = [trabajoPractico1._id, trabajoPractico2._id]; // Agrega los TPs a cada alumno
       await alumno.save();
-    }
+    } 
+    for (const alumno of alumnosSeleccionados) {
+      alumno.cursos = [curso2._id]; // Agrega los cursos a cada alumno
+      //alumno.tps = [trabajoPractico1._id, trabajoPractico2._id]; // Agrega los TPs a cada alumno
+      await alumno.save();
+    } 
 
     console.log("Datos nuevos insertados correctamente.");
   } catch (error) {
