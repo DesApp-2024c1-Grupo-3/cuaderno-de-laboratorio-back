@@ -6,6 +6,8 @@ router.get('/alumnos', controller.getData);
 
 router.get('/alumno/:alumnoId', controller.getCursosByAlumnoId);
 
+router.get('/alumno/:dni', controller.getIdAlumnoByDNI);
+
 router.get('/alumnoSolo/:alumnoId', controller.getAlumnoById);
 
 router.post('/alumno', controller.insertData);

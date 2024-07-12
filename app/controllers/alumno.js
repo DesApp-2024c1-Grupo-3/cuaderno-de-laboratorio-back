@@ -88,3 +88,24 @@ exports.addTpAndCurso = async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
+
+
+//SI no lo necesitamos lo borramos a la verga
+exports.getIdAlumnoByDNI = async (req, res) => {
+  const alumnoDNI = req.params.dni;
+  console.log("lo que trae alumno dni" + alumnoDNI);
+  const idAlumnoByDNI = await model.findOne({dni:alumnoDNI},'_id', (err, alumno) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    if (alumno) {
+
+      console.log('ID del alumno encontrado:', alumno._id);
+    } else {
+      console.log('Alumno no encontrado');
+    }
+  });
+  res.json({ });
+  console.log("lo que trae idalumnoby dni" + idAlumnoByDNI);
+}
