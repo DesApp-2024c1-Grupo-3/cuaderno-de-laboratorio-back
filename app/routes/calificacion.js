@@ -15,8 +15,11 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
 router.post('/calificacion', upload.array('file'), calificacionController.insertData);
 router.get('/calificacion/:tpId', calificacionController.getCalificacionDetails);
 router.get('/download/:filename', calificacionController.downloadFile);
+
+router.get('/calificacion/:grupoId/:tpId', calificacionController.getComAlumnByCalifId);
 
 module.exports = router;

@@ -22,53 +22,23 @@ exports.insertData = async (req, res) => {
     res.status(422).json({ error: "Error" });
   }
 };
-exports.getCalificacionDetails = async (req, res) => {
+
+exports.getComAlumnByCalifId = async (req, res) => {
+  const { grupoId, tpId } = req.params;
+  
   try {
-    const  tpId = req.params.tpId;
+    // Busca una Calificacion por su ID
+    const calif = await Calificacion.findOne({grupoId, tpId});
+    const coment = calif.comentarioAlum
+    
 
-    // Validar que tpId y grupoId estén presentes
-    if (!tpId) {
-      return res.status(400).send({
-        message: "tpId y grupoId son requeridos.",
-      });
+    if (!coment) {
+      return res.status(404).json({ error: "Calificacion no encontrada" });
     }
 
-    // Buscar la calificación correspondiente
-    const calificacion = await Calificacion.findById(tpId);
-
-    if (!calificacion) {
-      return res.status(404).send({
-        message: "No se encontraron detalles de la calificación.",
-      });
-    }
-
-    res.status(200).json(calificacion);
+    res.json({ coment });
   } catch (error) {
-    console.error('Error al obtener los detalles de la calificación:', error);
-    res.status(500).send({
-      message: "Error al obtener los detalles de la calificación.",
-    });
+    console.error("Error al buscar la calificación:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
   }
-};
-
-// Controlador para descargar archivos
-exports.downloadFile = (req, res) => {
-  const { filename } = req.params;
-  const filePath = path.join(__dirname, '../uploads', filename);
-
-  fs.exists(filePath, (exists) => {
-    if (exists) {
-      res.download(filePath, filename, (err) => {
-        if (err) {
-          res.status(500).send({
-            message: "No se pudo descargar el archivo. " + err,
-          });
-        }
-      });
-    } else {
-      res.status(404).send({
-        message: "Archivo no encontrado.",
-      });
-    }
-  });
 };
