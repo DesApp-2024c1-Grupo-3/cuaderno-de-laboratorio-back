@@ -6,7 +6,7 @@ router.get('/alumnos', controller.getData);
 
 router.get('/alumno/:alumnoId', controller.getCursosByAlumnoId);
 
-router.get('/alumno/:dni', controller.getIdAlumnoByDNI);
+router.get('/alumno/:dni', controller.getIdAlumnoByDNI); // si no se usa se borra
 
 router.get('/alumnoSolo/:alumnoId', controller.getAlumnoById);
 
