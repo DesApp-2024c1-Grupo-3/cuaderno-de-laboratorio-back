@@ -35,6 +35,6 @@ app.use(alumnoRouter);
 app.use(tpRouter);
 app.use(cursoRouter);
 app.use(grupoRouter);
-app.use(calificacionRouter );
+app.use(calificacionRouter);
 
 initDb();
