@@ -88,3 +88,13 @@ exports.addTpAndCurso = async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
+
+// devuelve todos los alumnos en JSON
+exports.getDataJson = async (req, res) => {
+  try {
+    const arrayAlumnos = await model.find();
+    res.json( arrayAlumnos );
+  } catch (error) {
+    console.log(`Ocurrio un error: ${error}`);
+  }
+};
