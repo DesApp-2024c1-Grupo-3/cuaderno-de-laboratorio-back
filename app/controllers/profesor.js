@@ -2,13 +2,13 @@ const model = require("../models/profesor");
 const CursoModel = require("../models/curso");
 const TrabajoPracticoModel = require("../models/trabajopractico");
 
-exports.getData = async (req, res) => {
+exports.getData = async (req, res) => { // devuelve todos los profesores en data
   try {
     const arrayProfesores = await model.find();
     console.log(arrayProfesores);
-    res.send({ arrayProfesores });
+    res.json({ arrayProfesores });
   } catch (error) {
-    console.log(`Ocurrio un error: ${error}`);
+    console.log(`Ocurrio un error: ${error}`); // este metodo lo modifique y tiene que ir el metodo anterior
   }
 };
 
@@ -100,3 +100,12 @@ exports.addTpToCursoByProfesorId = async (req, res) => {
   }
 };
 
+// devuelve todos los profesores en JSON
+exports.getDataJson = async (req, res) => {
+  try {
+    const arrayProfesoresJson = await model.find();
+    res.json( arrayProfesoresJson );
+  } catch (error) {
+    console.log(`Ocurrio un error: ${error}`);
+  }
+};

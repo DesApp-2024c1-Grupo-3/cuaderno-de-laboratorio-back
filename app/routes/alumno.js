@@ -4,6 +4,8 @@ const controller = require("../controllers/alumno");
 
 router.get('/alumnos', controller.getData);
 
+router.get('/alumnosJson', controller.getDataJson);
+
 router.get('/alumno/:alumnoId', controller.getCursosByAlumnoId);
 
 router.get('/alumnoSolo/:alumnoId', controller.getAlumnoById);
