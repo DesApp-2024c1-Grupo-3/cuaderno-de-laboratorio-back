@@ -4,7 +4,7 @@ const controller = require("../controllers/profesor");
 
 router.get('/profesores', controller.getData);
 
-router.get('profesoresJson', controller.getDataJson);
+router.get('/profesoresJson', controller.getDataJson);
 
 router.post('/profesor', controller.insertData);
 

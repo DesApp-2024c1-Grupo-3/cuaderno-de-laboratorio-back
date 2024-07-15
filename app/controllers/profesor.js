@@ -8,7 +8,7 @@ exports.getData = async (req, res) => { // devuelve todos los profesores en data
     console.log(arrayProfesores);
     res.json({ arrayProfesores });
   } catch (error) {
-    console.log(`Ocurrio un error: ${error}`);
+    console.log(`Ocurrio un error: ${error}`); // este metodo lo modifique y tiene que ir el metodo anterior
   }
 };
 
@@ -103,8 +103,8 @@ exports.addTpToCursoByProfesorId = async (req, res) => {
 // devuelve todos los profesores en JSON
 exports.getDataJson = async (req, res) => {
   try {
-    const arrayProfesores = await model.find();
-    res.json( arrayProfesores );
+    const arrayProfesoresJson = await model.find();
+    res.json( arrayProfesoresJson );
   } catch (error) {
     console.log(`Ocurrio un error: ${error}`);
   }
