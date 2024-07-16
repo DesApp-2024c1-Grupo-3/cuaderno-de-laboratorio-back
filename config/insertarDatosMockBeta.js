@@ -5,6 +5,7 @@ const Curso = require("../app/models/curso");
 const Alumno = require("../app/models/alumno");
 const Grupo = require("../app/models/grupo");
 const Materia = require("../app/models/materia");
+const Calificacion = require("../app/models/calificacion");
 
 const scope = "local";
 const uri = `mongodb://localhost:27017/${scope}`;
@@ -32,6 +33,7 @@ async function createData() {
       Grupo,
       TrabajoPractico,
       Materia,
+      Calificacion,
     ];
 
     // Limpiar todas las colecciones
@@ -65,7 +67,7 @@ async function createData() {
 
     // Crear Cursos
     const curso = new Curso({
-      comision: "1610",
+      comision: "1610 - Mañana",
       horario: "Lunes y Miércoles, 8:00 AM - 10:00 AM",
       fechaInicio: new Date(),
       fechaFin: new Date(),
@@ -76,8 +78,8 @@ async function createData() {
     const alumnosSeleccionados = alumnos.slice(5, 15);
 
     const curso2 = new Curso({
-      comision: "1609",
-      horario: "Martes y Jueves, 8:00 AM - 10:00 AM",
+      comision: "1609 - Tarde",
+      horario: "Martes y Jueves, 13:00 PM - 17:00 PM",
       fechaInicio: new Date(),
       fechaFin: new Date(),
       alumnos: alumnosSeleccionados, // seleccionamos 10 de la lista de  alumnos
