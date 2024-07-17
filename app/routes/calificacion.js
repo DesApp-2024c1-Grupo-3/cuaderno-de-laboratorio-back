@@ -24,4 +24,6 @@ router.get('/calificacionIndivdual/:idEntregaAlumno/:tpId', calificacionControll
 
 router.put('/calificacion/:id', calificacionController.updateCalificacion);
 
+router.delete('/calificacion/:calificacionId', calificacionController.deleteCalificacion);
+
 module.exports = router;

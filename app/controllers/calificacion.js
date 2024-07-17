@@ -46,20 +46,16 @@ exports.updateCalificacion = async (req, res) => {
 };
 
 exports.getComAlumnByCalifId = async (req, res) => {
-  const { grupoId, tpId } = req.params;
-  
+  const { grupoId, tpId } = req.params;  
   try {
     // Busca una Calificacion por su ID
-    const calif = await Calificacion.findOne({grupoId, tpId});
-    const coment = calif.comentarioAlum
-    const idCalif = calif._id
-    
-
-    if (!coment) {
+    const calif = await Calificacion.findOne({grupoId:{$eq:grupoId}, tpId:{$eq:tpId}});
+    const coment = calif
+    if (!calif) {
       return res.status(404).json({ error: "Calificacion no encontrada" });
     }
 
-    res.json({ coment, idCalif });
+    res.json({ coment });
   } catch (error) {
     console.error("Error al buscar la calificación:", error);
     res.status(500).json({ error: "Error interno del servidor" });
@@ -71,8 +67,7 @@ exports.getComAlumnIndByCalifId = async (req, res) => {
   try {
     // Busca una Calificacion por su ID
     const calificacion = await Calificacion.findOne({alumnoId:{$eq:idEntregaAlumno}, tpId:{$eq:tpId}});
-    const comentario = calificacion
-    
+    const comentario = calificacion  
 
     if (!calificacion) {
       return res.status(404).json({ error: "Calificacion no encontrada" });
@@ -81,6 +76,22 @@ exports.getComAlumnIndByCalifId = async (req, res) => {
     res.json({ comentario });
   } catch (error) {
     console.error("Error al buscar la calificación:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+// Función para eliminar un Tp por su ID
+exports.deleteCalificacion = async (req, res) => {
+  const calificacionId  = req.params.calificacionId;
+  try {
+    const deleteCalificacion = await Calificacion.findByIdAndDelete(calificacionId);
+
+    if (!deleteCalificacion) {
+      return res.status(404).json({ error: "Grupo no encontrado" });
+    }
+
+    res.status(200).json({ message: "Grupo eliminado exitosamente", deleteCalificacion });
+  } catch (error) {
+    console.error('Error al eliminar el Grupo:', error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
