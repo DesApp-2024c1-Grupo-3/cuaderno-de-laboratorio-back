@@ -31,4 +31,5 @@ const alumnoSchema = new Schema(
 // Crear el modelo
 const Alumno = mongoose.model("Alumno", alumnoSchema);
 
+
 module.exports = Alumno;

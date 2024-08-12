@@ -4,7 +4,12 @@ const Schema = mongoose.Schema;
 const trabajoPracticoSchema = new Schema(
   {
     nombre: String,
-    calificacion: Number,
+    calificacion: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Calificacion",
+      },
+    ],
     estado: {
       type: String,
       enum: ['Entregado', 'En proceso', 'En preparación'],

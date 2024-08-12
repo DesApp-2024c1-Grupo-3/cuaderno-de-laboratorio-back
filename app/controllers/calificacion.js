@@ -1,4 +1,5 @@
 const Calificacion = require("../models/calificacion");
+const Tp = require("../models/trabajopractico");
 
 exports.insertData = async (req, res) => {
   try {
@@ -16,6 +17,12 @@ exports.insertData = async (req, res) => {
     };
 
     const response = await Calificacion.create(calificacionData);
+    await Tp.findByIdAndUpdate(
+      tpId, 
+      { $push: { calificacion: response._id } },
+      { new: true }
+    );
+
     res.status(201).json(response);
   } catch (error) {
     console.log("Ocurrió un error al insertar un elemento en la tabla Calificación: ", error);
@@ -79,17 +86,45 @@ exports.getComAlumnIndByCalifId = async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
-// Función para eliminar un Tp por su ID
+exports.getCalificacionesByTpId = async (req, res) => {
+  const { tpId } = req.params;
+  try {
+    // Encuentra todas las calificaciones que tienen un valor asignado y corresponden al TP especificado
+    const calificaciones = await Calificacion.find({ tpId, calificacion: { $ne: null } }, 'calificacion alumnoId grupoId');
+    if (!calificaciones.length) {
+      return res.json([]);
+    }
+    res.json({calificaciones});
+  } catch (error) {
+    console.error('Error al obtener las calificaciones:', error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
+};
+
+exports.getCalificaciones = async (req, res) => {
+  const { alumnoId } = req.params;
+  console.log("Intentando obtener calificaciones para el alumno:", alumnoId);
+  try {
+    const calificaciones = await Calificacion.getCalificacionesByAlumno(alumnoId);
+    res.json({calificaciones});
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener las calificaciones', error });
+  }
+};
+
+// Función para eliminar una calificacion por su ID
 exports.deleteCalificacion = async (req, res) => {
   const calificacionId  = req.params.calificacionId;
   try {
     const deleteCalificacion = await Calificacion.findByIdAndDelete(calificacionId);
 
     if (!deleteCalificacion) {
-      return res.status(404).json({ error: "Grupo no encontrado" });
+      return res.status(404).json({ error: "Calificacion no encontrada" });
     }
+    // Actualizar el TP para eliminar la referencia a la calificación
+    await Tp.findByIdAndUpdate(deleteCalificacion.tpId, { $pull: { calificaciones: calificacionId } });
 
-    res.status(200).json({ message: "Grupo eliminado exitosamente", deleteCalificacion });
+    res.status(200).json({ message: "Calificacion eliminada exitosamente", deleteCalificacion });
   } catch (error) {
     console.error('Error al eliminar el Grupo:', error);
     res.status(500).json({ error: "Error interno del servidor" });

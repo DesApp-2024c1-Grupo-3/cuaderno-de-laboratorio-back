@@ -22,6 +22,10 @@ router.get('/calificacion/:grupoId/:tpId', calificacionController.getComAlumnByC
 
 router.get('/calificacionIndivdual/:idEntregaAlumno/:tpId', calificacionController.getComAlumnIndByCalifId);
 
+router.get('/calificacionesTp/:tpId', calificacionController.getCalificacionesByTpId);
+
+router.get('/calificaciones/:alumnoId', calificacionController.getCalificaciones);
+
 router.put('/calificacion/:id', calificacionController.updateCalificacion);
 
 router.delete('/calificacion/:calificacionId', calificacionController.deleteCalificacion);

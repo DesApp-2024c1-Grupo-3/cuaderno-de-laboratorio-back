@@ -27,9 +27,59 @@ const calificacionSchema = new Schema(
   },
 );
 
+calificacionSchema.statics.getCalificacionesByAlumno = async function(alumnoId) {
+  try {
+    const calificaciones = await this.aggregate([
+      {
+        $lookup: {
+          from: 'trabajopractico',
+          localField: 'tpId',
+          foreignField: '_id',
+          as: 'trabajoPractico'
+        }
+      },
+      {
+        $lookup: {
+          from: 'grupos', // Nombre de la colección de grupos
+          localField: 'grupoId',
+          foreignField: '_id',
+          as: 'grupo'
+        }
+      },    
+      {
+        $unwind: {
+          path: '$grupo',
+          preserveNullAndEmptyArrays: true // En caso de que no haya grupo relacionado
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          tpId: 1,
+          calificacion: 1,
+          grupoId: 1,
+          alumnoId: 1,
+          "grupo.alumnos": 1 // Incluir los alumnos del grupo
+        }
+      },
+      {
+        $match: {
+           alumnoId: new mongoose.Types.ObjectId(alumnoId),  
+            // Calificaciones individuales
+          
+          
+        }
+      }
 
+     
+    ]);
 
+    return calificaciones;
+  } catch (error) {
+    console.error('Error al obtener las calificaciones:', error);
+    throw error;
+  }
+};
 // Crear el modelo
 const Calificacion = mongoose.model("Calificacion", calificacionSchema);
-
 module.exports = Calificacion;
