@@ -147,3 +147,22 @@ exports.getTpId = async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
+exports.updateTp = async (req, res) => {
+  const { tpId } = req.params;
+  const updatedData = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(tpId)) {
+    return res.status(400).send('ID de trabajo práctico no válido');
+  }
+
+  try {
+    const tp = await model.findByIdAndUpdate(tpId, updatedData, { new: true });
+    if (!tp) {
+      return res.status(404).send('Trabajo práctico no encontrado');
+    }
+    res.status(200).json({ message: "Tp modificado exitosamente", tpId });
+  } catch (error) {
+    console.error('Error al actualizar el trabajo práctico:', error);
+    res.status(500).send(`Error al actualizar el trabajo práctico: ${error.message}`);
+  }
+};

@@ -16,5 +16,6 @@ router.get('/tps', controller.getData);
 
 router.get('/tps/:tpId', controller.getTpId);
 
+router.put('/tp/:tpId', controller.updateTp);
 
 module.exports = router;
