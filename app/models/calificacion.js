@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const TrabajoPractico = require("./trabajopractico");
 const Schema = mongoose.Schema;
 
 
@@ -39,17 +40,23 @@ calificacionSchema.statics.getCalificacionesByAlumno = async function(alumnoId) 
         }
       },
       {
+        $unwind: {
+          path: '$trabajoPractico',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
         $lookup: {
-          from: 'grupos', // Nombre de la colección de grupos
+          from: 'grupos',
           localField: 'grupoId',
           foreignField: '_id',
           as: 'grupo'
         }
-      },    
+      },
       {
         $unwind: {
           path: '$grupo',
-          preserveNullAndEmptyArrays: true // En caso de que no haya grupo relacionado
+          preserveNullAndEmptyArrays: true
         }
       },
       {
@@ -59,19 +66,17 @@ calificacionSchema.statics.getCalificacionesByAlumno = async function(alumnoId) 
           calificacion: 1,
           grupoId: 1,
           alumnoId: 1,
-          "grupo.alumnos": 1 // Incluir los alumnos del grupo
+          "grupo.alumnos": 1
         }
       },
       {
         $match: {
-           alumnoId: new mongoose.Types.ObjectId(alumnoId),  
-            // Calificaciones individuales
-          
-          
+          $or: [
+            { alumnoId: new mongoose.Types.ObjectId(alumnoId) },
+            { "grupo.alumnos": new mongoose.Types.ObjectId(alumnoId) }
+          ]
         }
       }
-
-     
     ]);
 
     return calificaciones;
