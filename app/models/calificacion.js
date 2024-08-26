@@ -8,6 +8,7 @@ const calificacionSchema = new Schema(
     comentarioAlum: String,
     devolucionProf: String,
     calificacion: Number, 
+    calificado: Boolean,
     tpId: {
       type: Schema.Types.ObjectId,
       ref: "trabajopractico",

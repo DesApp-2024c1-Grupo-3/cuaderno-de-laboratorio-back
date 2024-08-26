@@ -3,7 +3,7 @@ const Tp = require("../models/trabajopractico");
 
 exports.insertData = async (req, res) => {
   try {
-    const { comentarioAlum, devolucionProf, calificacion, tpId, alumnoId, grupoId } = req.body;
+    const { comentarioAlum, devolucionProf, calificacion, calificado, tpId, alumnoId, grupoId } = req.body;
     const archivos = req.files.map(file => file.filename);
 
     const calificacionData = {
@@ -11,6 +11,7 @@ exports.insertData = async (req, res) => {
       comentarioAlum,
       devolucionProf,
       calificacion: calificacion ? Number(calificacion) : null,
+      calificado: false,
       tpId,
       alumnoId,
       grupoId
@@ -32,12 +33,12 @@ exports.insertData = async (req, res) => {
 
 exports.updateCalificacion = async (req, res) => {
   const { id } = req.params;
-  const { devolucionProf, calificacion } = req.body;
+  const { devolucionProf, calificacion, calificado } = req.body;
 
   try {
     const calificacionActualizada = await Calificacion.findByIdAndUpdate(
       id,
-      { devolucionProf, calificacion },
+      { devolucionProf, calificacion, calificado },
       { new: true }
     );
 
