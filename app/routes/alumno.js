@@ -8,6 +8,9 @@ router.get('/alumnosJson', controller.getDataJson);
 
 router.get('/alumno/:alumnoId', controller.getCursosByAlumnoId);
 
+router.get('/alumno/:alumnoId/cursos', controller.getCursosByAlumnoIdWithAgreggate);
+
+
 router.get('/alumnoSolo/:alumnoId', controller.getAlumnoById);
 
 router.post('/alumno', controller.insertData);
