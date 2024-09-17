@@ -12,6 +12,10 @@ const cursoRouter = require('./app/routes/curso');
 const grupoRouter = require('./app/routes/grupo');
 const calificacionRouter  = require('./app/routes/calificacion');
 
+const setupSwaggerDocs = require('./config/swaggerConfig');
+// Configuración de Swagger 
+setupSwaggerDocs(app);
+
 const port = "8080";
 
 app.use(cors()); 
