@@ -3,11 +3,22 @@ const Tp = require("../models/trabajopractico");
 
 exports.insertData = async (req, res) => {
   try {
-    const { comentarioAlum, devolucionProf, calificacion, tpId, alumnoId, grupoId } = req.body;
-    const archivos = req.files.map(file => file.filename);
+    // Verificar si hay archivos subidos
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: 'No se subió ningún archivo' });
+    }
 
+    const { comentarioAlum, devolucionProf, calificacion, tpId, alumnoId, grupoId } = req.body;
+    //const archivos = req.files.map(file => file.filename);
+    // Mapea los archivos para guardarlos en formato binario
+    const archivos = req.files.map(file => ({
+      file: file.buffer,
+      fileType: file.mimetype
+    }));
     const calificacionData = {
-      file: archivos,
+      //file: archivos,
+      file: archivos.map(archivo => archivo.file),  // Lista de archivos en formato binario
+      fileType: archivos.map(archivo => archivo.fileType), // Tipo de archivo (MIME)
       comentarioAlum,
       devolucionProf,
       calificacion: calificacion ? Number(calificacion) : null,
@@ -29,6 +40,36 @@ exports.insertData = async (req, res) => {
     res.status(422).json({ error: "Error" });
   }
 };
+
+exports.downloadFile = async (req, res) => {
+  try {
+    const { idCalificacion, index } = req.params;
+
+    // Busca la calificación por ID
+    const calificacion = await Calificacion.findById(idCalificacion);
+
+    if (!calificacion || !calificacion.file || !calificacion.file[index]) {
+      return res.status(404).json({ error: 'Archivo no encontrado' });
+    }
+
+    // Extraer archivo y tipo MIME
+    const archivo = calificacion.file[index];
+    const fileType = calificacion.fileType[index];
+
+    // Establece las cabeceras necesarias para la descarga
+    res.set({
+      'Content-Type': fileType,
+      'Content-Disposition': `attachment; filename=archivo.${fileType.split('/')[1]}` // El nombre puede ser dinámico
+    });
+
+    // Envía el archivo en la respuesta
+    return res.send(archivo);
+  } catch (error) {
+    console.error('Error al descargar archivo:', error);
+    res.status(500).json({ error: 'Error al descargar el archivo' });
+  }
+};
+
 
 exports.updateCalificacion = async (req, res) => {
   const { id } = req.params;

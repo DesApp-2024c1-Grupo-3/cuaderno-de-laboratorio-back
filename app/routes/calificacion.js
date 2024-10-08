@@ -1,8 +1,28 @@
 const express = require("express");
 const router = express.Router();
+//const upload = require("../config/multerConfig");
 const calificacionController = require("../controllers/calificacion");
 const multer = require('multer');
-const path = require('path');
+// Definir almacenamiento en memoria
+const storage = multer.memoryStorage();
+
+// Definir filtro de archivos para validar tipos MIME permitidos
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = [
+    'application/pdf',
+    'image/jpeg',
+    'image/png',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    // Agrega otros tipos MIME que necesites permitir
+  ];
+
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true); // Acepta el archivo
+  } else {
+    cb(new Error('Tipo de archivo no permitido. Solo se aceptan PDF, JPG, PNG y DOCX.'), false); // Rechaza el archivo
+  }
+};
+/* const path = require('path');
 
 // Configurar multer
 const storage = multer.diskStorage({
@@ -12,11 +32,13 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname)); // Nombre del archivo
   }
-});
+}); */
 
-const upload = multer({ storage });
+const upload = multer({ 
+    storage: storage,
+  fileFilter: fileFilter, });
 
-router.post('/calificacion', upload.array('file'), calificacionController.insertData);
+router.post('/calificacion', upload.array('file', 10), calificacionController.insertData);
 
 router.get('/calificacion/:grupoId/:tpId', calificacionController.getComAlumnByCalifId);
 

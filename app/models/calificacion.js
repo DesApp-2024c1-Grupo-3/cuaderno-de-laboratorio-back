@@ -5,7 +5,8 @@ const Schema = mongoose.Schema;
 
 const calificacionSchema = new Schema(
   {
-    file: [""],  //Lista de extensiones que se pueden carga .doc, .pdf, .xls
+    file: [Buffer],  // Almacenar archivos en formato binario
+    fileType: [String], // Mime-type (ej. 'application/pdf', 'image/png') 
     comentarioAlum: String,
     devolucionProf: String,
     calificacion: Number, 
