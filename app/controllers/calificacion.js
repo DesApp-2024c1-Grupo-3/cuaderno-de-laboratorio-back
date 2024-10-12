@@ -9,16 +9,18 @@ exports.insertData = async (req, res) => {
     }
 
     const { comentarioAlum, devolucionProf, calificacion, tpId, alumnoId, grupoId } = req.body;
-    //const archivos = req.files.map(file => file.filename);
+    
     // Mapea los archivos para guardarlos en formato binario
     const archivos = req.files.map(file => ({
-      file: file.buffer,
-      fileType: file.mimetype
+      file: file.buffer,          // Datos binarios del archivo
+      fileType: file.mimetype,    // Tipo MIME del archivo
+      fileName: file.originalname // Nombre original del archivo
     }));
     const calificacionData = {
       //file: archivos,
       file: archivos.map(archivo => archivo.file),  // Lista de archivos en formato binario
       fileType: archivos.map(archivo => archivo.fileType), // Tipo de archivo (MIME)
+      fileName: archivos.map(archivo => archivo.fileName), // Nombre de los archivos
       comentarioAlum,
       devolucionProf,
       calificacion: calificacion ? Number(calificacion) : null,

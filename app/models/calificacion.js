@@ -7,6 +7,7 @@ const calificacionSchema = new Schema(
   {
     file: [Buffer],  // Almacenar archivos en formato binario
     fileType: [String], // Mime-type (ej. 'application/pdf', 'image/png') 
+    fileName: [String], // Almacenar nombres de los archivos
     comentarioAlum: String,
     devolucionProf: String,
     calificacion: Number, 

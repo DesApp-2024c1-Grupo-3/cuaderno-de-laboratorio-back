@@ -22,17 +22,6 @@ const fileFilter = (req, file, cb) => {
     cb(new Error('Tipo de archivo no permitido. Solo se aceptan PDF, JPG, PNG y DOCX.'), false); // Rechaza el archivo
   }
 };
-/* const path = require('path');
-
-// Configurar multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Carpeta donde se guardarán los archivos
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Nombre del archivo
-  }
-}); */
 
 const upload = multer({ 
     storage: storage,
