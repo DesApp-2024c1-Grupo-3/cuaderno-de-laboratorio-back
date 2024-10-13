@@ -2,7 +2,8 @@ const express = require("express");
 const cors = require("cors"); // Importa el paquete CORS
 const fs = require('fs');
 const path = require('path');
-
+const jwt = require('jsonwebtoken');
+const jwksClient = require('jwks-rsa');
 const app = express();
 const initDb = require("./config/db");
 const profesorRouter = require('./app/routes/profesor');
@@ -11,7 +12,7 @@ const tpRouter = require('./app/routes/trabajopractico');
 const cursoRouter = require('./app/routes/curso');
 const grupoRouter = require('./app/routes/grupo');
 const calificacionRouter  = require('./app/routes/calificacion');
-
+const setupSwaggerDocs = require('./config/swaggerConfig');
 const port = "8080";
 
 app.use(cors()); 
@@ -29,7 +30,7 @@ if (!fs.existsSync(uploadsDir)) {
 
 app.use(express.json());
 
-
+setupSwaggerDocs(app);
 app.use(profesorRouter);
 app.use(alumnoRouter);
 app.use(tpRouter);
