@@ -3,10 +3,10 @@ const router = express.Router();
 //const upload = require("../config/multerConfig");
 const calificacionController = require("../controllers/calificacion");
 const multer = require('multer');
-// Definir almacenamiento en memoria
+// Define almacenamiento en memoria
 const storage = multer.memoryStorage();
 
-// Definir filtro de archivos para validar tipos MIME permitidos
+// Define filtro de archivos para validar tipos MIME permitidos
 const fileFilter = (req, file, cb) => {
   const allowedTypes = [
     'application/pdf',
