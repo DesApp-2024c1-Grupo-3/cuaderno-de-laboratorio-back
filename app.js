@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors"); // Importa el paquete CORS
 const fs = require('fs');
 const path = require('path');
+require('./config/cron.js');  
 
 const app = express();
 const initDb = require("./config/db");

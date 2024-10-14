@@ -166,3 +166,45 @@ exports.updateTp = async (req, res) => {
     res.status(500).send(`Error al actualizar el trabajo práctico: ${error.message}`);
   }
 };
+
+exports.updateEstadoTps = async (req, res) => {
+  try {
+    const now = new Date();
+    
+    // Obtener todos los trabajos prácticos
+    const tps = await model.find();
+
+    // Inicializar un array para guardar las promesas de actualización
+    const updatePromises = [];
+
+    tps.forEach(tp => {
+      if (tp.estado === "Cerrado") {
+        // Si el estado es "Cerrado", no se hace nada
+        return;
+      }
+
+      if (tp.fechaInicio && tp.fechaInicio.toISOString().slice(0, 10) === now.toISOString().slice(0, 10)) {
+        // Si la fecha de inicio es igual a la fecha actual y el estado es "Futuro"
+        if (tp.estado === "Futuro") {
+          updatePromises.push(model.findByIdAndUpdate(tp._id, { estado: 'En marcha' }));
+        }
+      }
+
+      if (tp.fechaFin && tp.fechaFin.toISOString().slice(0, 10) === now.toISOString().slice(0, 10)) {
+        // Si la fecha de fin es igual a la fecha actual y el estado es "En marcha"
+        if (tp.estado === "En marcha") {
+          updatePromises.push(model.findByIdAndUpdate(tp._id, { estado: 'En evaluacion' }));
+        }
+      }
+    });
+
+    // Esperar que todas las promesas de actualización se completen
+    await Promise.all(updatePromises);
+
+    res.status(200).json({ message: "Estados de trabajos prácticos actualizados." });
+  } catch (error) {
+    console.error('Error actualizando los estados:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+

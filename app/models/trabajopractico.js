@@ -12,8 +12,8 @@ const trabajoPracticoSchema = new Schema(
     ],
     estado: {
       type: String,
-      enum: ['Entregado', 'En proceso', 'En preparación'],
-      default: 'En preparación'
+      enum: ['Futuro', 'En marcha', 'En evaluacion', 'Cerrado'],
+      default: 'Futuro'
     },
     fechaInicio: Date,
     fechaFin: Date,
@@ -36,14 +36,15 @@ const trabajoPracticoSchema = new Schema(
   }
 );
 
-// Middleware para actualizar el estado automáticamente antes de guardar
 trabajoPracticoSchema.pre('save', function (next) {
-  if (this.calificacion) {
-    this.estado = 'Entregado';
-  } else if (this.fechaFin && this.fechaInicio) {
-    this.estado = 'En proceso';
-  } else if (this.nombre && this.consigna) {
-    this.estado = 'En preparación';
+  const now = new Date();
+
+  if (this.fechaFin && now > this.fechaFin) {
+    this.estado = 'En evaluacion';
+  } else if (this.fechaInicio && now >= this.fechaInicio) {
+    this.estado = 'En marcha';
+  } else {
+    this.estado = 'Futuro';
   }
   next();
 });
