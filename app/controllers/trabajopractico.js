@@ -150,13 +150,26 @@ exports.getTpId = async (req, res) => {
 exports.updateTp = async (req, res) => {
   const { tpId } = req.params;
   const updatedData = req.body;
-
+  console.log('Datos recibidos para la actualización:', updatedData);  // Verifica el contenido de los datos
+ 
   if (!mongoose.Types.ObjectId.isValid(tpId)) {
     return res.status(400).send('ID de trabajo práctico no válido');
   }
 
   try {
-    const tp = await model.findByIdAndUpdate(tpId, updatedData, { new: true });
+    const tp = await model.findByIdAndUpdate(tpId, 
+      {
+        $set: {
+          nombre: updatedData.nombre,
+          fechaInicio: updatedData.fechaInicio,
+          fechaFin: updatedData.fechaFin,
+          grupal: updatedData.grupal,
+          grupos: updatedData.grupo, 
+          consigna: updatedData.consigna,
+          cuatrimestre: updatedData.cuatrimestre,
+          estado: updatedData.estado,
+        }
+      }, { new: true });
     if (!tp) {
       return res.status(404).send('Trabajo práctico no encontrado');
     }
