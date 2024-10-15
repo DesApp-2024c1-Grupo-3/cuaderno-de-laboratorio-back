@@ -150,13 +150,26 @@ exports.getTpId = async (req, res) => {
 exports.updateTp = async (req, res) => {
   const { tpId } = req.params;
   const updatedData = req.body;
-
+  console.log('Datos recibidos para la actualización:', updatedData);  // Verifica el contenido de los datos
+ 
   if (!mongoose.Types.ObjectId.isValid(tpId)) {
     return res.status(400).send('ID de trabajo práctico no válido');
   }
 
   try {
-    const tp = await model.findByIdAndUpdate(tpId, updatedData, { new: true });
+    const tp = await model.findByIdAndUpdate(tpId, 
+      {
+        $set: {
+          nombre: updatedData.nombre,
+          fechaInicio: updatedData.fechaInicio,
+          fechaFin: updatedData.fechaFin,
+          grupal: updatedData.grupal,
+          grupos: updatedData.grupo, 
+          consigna: updatedData.consigna,
+          cuatrimestre: updatedData.cuatrimestre,
+          estado: updatedData.estado,
+        }
+      }, { new: true });
     if (!tp) {
       return res.status(404).send('Trabajo práctico no encontrado');
     }
@@ -164,5 +177,61 @@ exports.updateTp = async (req, res) => {
   } catch (error) {
     console.error('Error al actualizar el trabajo práctico:', error);
     res.status(500).send(`Error al actualizar el trabajo práctico: ${error.message}`);
+  }
+};
+// Nueva función que contiene la lógica de actualización de los TPs sin req ni res
+const actualizarEstados = async () => {
+  const now = new Date().toISOString().slice(0, 10); // Solo la fecha actual en formato YYYY-MM-DD
+  console.log("ahora:", now)
+  // Obtener todos los trabajos prácticos
+  const tps = await model.find();
+  
+  // Inicializar un array para guardar las promesas de actualización
+  const updatePromises = [];
+
+  tps.forEach(tp => {
+    if (tp.estado === "Cerrado") {
+      // Si el estado es "Cerrado", no se hace nada
+      return;
+    }
+    
+    const fechaInicio = tp.fechaInicio.toISOString().slice(0, 10); // Solo la fecha en formato YYYY-MM-DD
+    const fechaFin = tp.fechaFin.toISOString().slice(0, 10); // Solo la fecha en formato YYYY-MM-DD
+    console.log("fechaInicio:", fechaInicio)  
+    console.log("fechaFin:", fechaFin)  
+
+    if (fechaInicio === now && tp.estado === "Futuro") {
+      // Cambiar el estado a "En marcha" si la fecha de inicio es hoy y el estado es "Futuro"
+      updatePromises.push(model.findByIdAndUpdate(tp._id, { estado: 'En marcha' }));
+    }
+
+    if (fechaFin === now && tp.estado === "En marcha") {
+      // Cambiar el estado a "En evaluación" si la fecha de fin es hoy y el estado es "En marcha"
+      updatePromises.push(model.findByIdAndUpdate(tp._id, { estado: 'En evaluacion' }));
+    }
+  });
+
+  // Esperar que todas las promesas de actualización se completen
+  await Promise.all(updatePromises);
+};
+
+// Función para manejar la actualización desde el cron (sin req y res)
+exports.updateEstadoTpsCron = async () => {
+  try {
+    await actualizarEstados();
+    console.log("Estados de trabajos prácticos actualizados (desde cron).");
+  } catch (error) {
+    console.error('Error actualizando los estados desde el cron:', error);
+  }
+};
+
+// Función para manejar la actualización desde un endpoint HTTP
+exports.updateEstadoTps = async (req, res) => {
+  try {
+    await actualizarEstados();
+    res.status(200).json({ message: "Estados de trabajos prácticos actualizados." });
+  } catch (error) {
+    console.error('Error actualizando los estados:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };

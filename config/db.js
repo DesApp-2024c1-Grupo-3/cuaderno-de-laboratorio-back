@@ -1,19 +1,14 @@
-// config/db.js
-const mongoose = require('mongoose');
-require('dotenv').config();
+const mongoose = require("mongoose");
 
-const uri = `mongodb+srv://cesaraugustopacheco:${encodeURIComponent(process.env.DB_PASSWORD)}@clusterunahur.lqu9g.mongodb.net/Proyect?retryWrites=true&w=majority`;
+const scope = "local"
+const uri = `mongodb://localhost:27017/${scope}`;
 
-const initDb = () => {
-  mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    maxPoolSize: 10, // Opcional, para configurar el pool de conexiones
-  }).then(() => {
-    console.log("Conexión exitosa a MongoDB Atlas con Mongoose");
-  }).catch(err => {
-    console.error("Error conectando a MongoDB Atlas:", err.message);
-  });
+module.exports = () => {
+  const connect = () => {
+    mongoose
+      .connect(uri, { useNewUrlParser: true })
+      .then(() => console.log("Se ha conectado a mongodb correctamente"))
+      .catch((e) => console.log("error de conexión a mongodb", e.message));
+  };
+  connect();
 };
-
-module.exports = initDb;

@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -8,14 +7,14 @@ const alumnoSchema = new Schema(
     apellido: String,
     dni: Number,
     email: String,
-   
+    password: String, // Añado el campo password
   },
-  
   {
     versionKey: false,
     timestamps: true,
   }
 );
+
 // Método estático para obtener los cursos de un alumno
 alumnoSchema.statics.getCursosByAlumno = async function (alumnoId) {
   try {
@@ -35,7 +34,6 @@ alumnoSchema.statics.getCursosByAlumno = async function (alumnoId) {
       {
         $unwind: '$cursos'  // Desempaqueta el array de cursos
       },
-  // Lookup para obtener la materia del curso
       {
         $lookup: {
           from: 'materias',  // Asegúrate de que el nombre de la colección de materias es correcto
@@ -60,7 +58,6 @@ alumnoSchema.statics.getCursosByAlumno = async function (alumnoId) {
       }
     ]);
 
-
     console.log("Cursos obtenidos para el alumno:", cursosAlumno);
     return cursosAlumno;  // Devuelve los cursos en los que el alumno está inscrito
   } catch (error) {
@@ -68,6 +65,7 @@ alumnoSchema.statics.getCursosByAlumno = async function (alumnoId) {
     throw error;
   }
 };
+
 // Crear el modelo
 const Alumno = mongoose.model("Alumno", alumnoSchema);
 module.exports = Alumno;

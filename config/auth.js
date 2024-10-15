@@ -1,6 +1,6 @@
 const getToken = async (username, password) => {
-  const clientId = 'cuaderno-de-lab-swagger'; 
-  const clientSecret = 'ukzOgRWtQkyy53pa58thHFHOyojADCR6'; 
+  const clientId = 'cuaderno-de-lab'; 
+  const clientSecret = 'QlIUEX2kTEF7XiUuSoRWyUxT7LW0nl3i'; 
 
   try {
     const response = await fetch('http://localhost:8080/auth/realms/cuaderno-de-lab/protocol/openid-connect/token', {

@@ -7,6 +7,7 @@ const profesorSchema = new Schema(
     apellido: String,
     dni: Number,
     email: String,
+    password: String, //Agrego campo 
     cursos: [
       {
         type: Schema.Types.ObjectId,
