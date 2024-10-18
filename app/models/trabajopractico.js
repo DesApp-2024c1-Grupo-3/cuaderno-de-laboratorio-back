@@ -4,7 +4,9 @@ const Schema = mongoose.Schema;
 const trabajoPracticoSchema = new Schema(
   {
     nombre: String,
-    
+    file: [Buffer],  // Almacenar archivos en formato binario
+    fileType: [String], // Mime-type (ej. 'application/pdf', 'image/png') 
+    fileName: [String], // Almacenar nombres de los archivos
     estado: {
       type: String,
       enum: ['Futuro', 'En marcha', 'En evaluacion', 'Cerrado'],

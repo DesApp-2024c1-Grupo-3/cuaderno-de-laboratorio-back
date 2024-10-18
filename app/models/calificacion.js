@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const TrabajoPractico = require("./trabajopractico");
 const Schema = mongoose.Schema;
 
 
