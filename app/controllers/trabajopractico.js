@@ -1,6 +1,8 @@
 const model = require("../models/trabajopractico");
 const mongoose = require('mongoose');
 const Grupo = require('../models/grupo');
+const CursoModel = require("../models/curso");
+const modelProfesor = require("../models/profesor");
 
 exports.getData = async (req, res) => {
   try {
@@ -24,6 +26,54 @@ exports.insertData = async (req, res) => {
       error
     );
     res.send({ error: "Error" }, 422);
+  }
+};
+exports.insertDataBynari = async (req, res) => {
+  const profesorId = req.params.profesorId;
+  const cursoId = req.params.cursoId;
+  const data = req.body;
+  try {
+    // Verificar si el profesor existe
+    const profesor = await modelProfesor.findById(profesorId);
+    if (!profesor) {
+      return res.status(404).json({ error: `Profesor no encontrado con ID: ${profesorId}` });
+    }
+    // Verificar si el curso pertenece al profesor
+    if (!profesor.cursos.includes(cursoId)) {
+      return res.status(403).json({ error: `El profesor no tiene acceso al curso con ID: ${cursoId}` });
+    }
+    const { data } = req.body;
+    
+    // Mapea los archivos para guardarlos en formato binario
+    const archivos = req.files.map(file => ({
+      file: file.buffer,          // Datos binarios del archivo
+      fileType: file.mimetype,    // Tipo MIME del archivo
+      fileName: file.originalname // Nombre original del archivo
+    }));
+    const tpData = {
+      //file: archivos,
+      file: archivos.map(archivo => archivo.file),  // Lista de archivos en formato binario
+      fileType: archivos.map(archivo => archivo.fileType), // Tipo de archivo (MIME)
+      fileName: archivos.map(archivo => archivo.fileName), // Nombre de los archivos
+      comentarioAlum,
+      devolucionProf,
+      calificacion: calificacion ? Number(calificacion) : null,
+      tpId,
+      alumnoId,
+      grupoId
+    };
+
+    const response = await Calificacion.create(tpData);
+    await Tp.findByIdAndUpdate(
+      tpId, 
+      { $push: { calificacion: response._id } },
+      { new: true }
+    );
+
+    res.status(201).json(response);
+  } catch (error) {
+    console.log("Ocurrió un error al insertar un elemento en la tabla Calificación: ", error);
+    res.status(422).json({ error: "Error" });
   }
 };
 

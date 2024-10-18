@@ -43,36 +43,6 @@ exports.insertData = async (req, res) => {
   }
 };
 
-exports.downloadFile = async (req, res) => {
-  try {
-    const { idCalificacion, index } = req.params;
-
-    // Busca la calificación por ID
-    const calificacion = await Calificacion.findById(idCalificacion);
-
-    if (!calificacion || !calificacion.file || !calificacion.file[index]) {
-      return res.status(404).json({ error: 'Archivo no encontrado' });
-    }
-
-    // Extraer archivo y tipo MIME
-    const archivo = calificacion.file[index];
-    const fileType = calificacion.fileType[index];
-
-    // Establece las cabeceras necesarias para la descarga
-    res.set({
-      'Content-Type': fileType,
-      'Content-Disposition': `attachment; filename=archivo.${fileType.split('/')[1]}` // El nombre puede ser dinámico
-    });
-
-    // Envía el archivo en la respuesta
-    return res.send(archivo);
-  } catch (error) {
-    console.error('Error al descargar archivo:', error);
-    res.status(500).json({ error: 'Error al descargar el archivo' });
-  }
-};
-
-
 exports.updateCalificacion = async (req, res) => {
   const { id } = req.params;
   const { devolucionProf, calificacion } = req.body;
