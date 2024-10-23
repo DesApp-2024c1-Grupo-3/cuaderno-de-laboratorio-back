@@ -31,7 +31,7 @@ exports.insertData = async (req, res) => {
 exports.insertDataBynari = async (req, res) => {
   const profesorId = req.params.profesorId;
   const cursoId = req.params.cursoId;
-  const data = req.body;
+  
   try {
     // Verificar si el profesor existe
     const profesor = await modelProfesor.findById(profesorId);
@@ -42,37 +42,41 @@ exports.insertDataBynari = async (req, res) => {
     if (!profesor.cursos.includes(cursoId)) {
       return res.status(403).json({ error: `El profesor no tiene acceso al curso con ID: ${cursoId}` });
     }
-    const { data } = req.body;
-    
+    const { nombre, fechaInicio, fechaFin, grupal, consigna } = req.body;
+
+    // Convertir 'grupos' de cadena JSON a array
+    const grupos = req.body.grupos ? JSON.parse(req.body.grupos) : [];  // Ahora tienes el array original [1, 2, 3]
+
     // Mapea los archivos para guardarlos en formato binario
     const archivos = req.files.map(file => ({
       file: file.buffer,          // Datos binarios del archivo
       fileType: file.mimetype,    // Tipo MIME del archivo
       fileName: file.originalname // Nombre original del archivo
-    }));
-    const tpData = {
+    })) || [];
+    const nuevoTp = {
+
       //file: archivos,
       file: archivos.map(archivo => archivo.file),  // Lista de archivos en formato binario
       fileType: archivos.map(archivo => archivo.fileType), // Tipo de archivo (MIME)
       fileName: archivos.map(archivo => archivo.fileName), // Nombre de los archivos
-      comentarioAlum,
-      devolucionProf,
-      calificacion: calificacion ? Number(calificacion) : null,
-      tpId,
-      alumnoId,
-      grupoId
+      nombre,
+      fechaInicio, 
+      fechaFin,
+      grupal,
+      consigna,
+      ...(grupal && { grupos }),  // Solo agrega grupos si es un trabajo grupal
+    
     };
-
-    const response = await Calificacion.create(tpData);
-    await Tp.findByIdAndUpdate(
-      tpId, 
-      { $push: { calificacion: response._id } },
-      { new: true }
-    );
-
+    const response = await model.create(nuevoTp);
+      // Agregar el Trabajo Práctico al curso
+      await CursoModel.findByIdAndUpdate(
+        cursoId,
+        { $push: { tps: response._id } },
+        { new: true }
+      );
     res.status(201).json(response);
   } catch (error) {
-    console.log("Ocurrió un error al insertar un elemento en la tabla Calificación: ", error);
+    console.log("Ocurrió un error al crear un trabajo prctico: ", error);
     res.status(422).json({ error: "Error" });
   }
 };

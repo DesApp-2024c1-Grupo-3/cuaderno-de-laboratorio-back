@@ -3,7 +3,7 @@ const router = express.Router();
 const controller = require("../controllers/trabajopractico");
 const upload = require("../../config/multerConfig");
 
-router.post('/calificacion', upload.array('file', 10), controller.insertDataBynari);
+router.post('/tpNuevo/profesor/:profesorId/curso/:cursoId/', upload.array('file', 10), controller.insertDataBynari);
 
 /**
  * @swagger
