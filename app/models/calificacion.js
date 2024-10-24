@@ -10,7 +10,7 @@ const calificacionSchema = new Schema(
     fileName: [String], // Almacenar nombres de los archivos
     comentarioAlum: String,
     devolucionProf: String,
-    calificacion: Number, 
+    calificacion: String, 
     tpId: {
       type: Schema.Types.ObjectId,
       ref: "trabajopractico",
