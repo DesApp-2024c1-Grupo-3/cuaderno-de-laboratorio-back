@@ -4,9 +4,7 @@ const Schema = mongoose.Schema;
 
 const calificacionSchema = new Schema(
   {
-    file: [Buffer],  // Almacenar archivos en formato binario
-    fileType: [String], // Mime-type (ej. 'application/pdf', 'image/png') 
-    fileName: [String], // Almacenar nombres de los archivos
+    file: [""],  //Lista de extensiones que se pueden carga .doc, .pdf, .xls
     comentarioAlum: String,
     devolucionProf: String,
     calificacion: Number, 
@@ -42,23 +40,17 @@ calificacionSchema.statics.getCalificacionesByAlumno = async function(alumnoId) 
         }
       },
       {
-        $unwind: {
-          path: '$trabajoPractico',
-          preserveNullAndEmptyArrays: true
-        }
-      },
-      {
         $lookup: {
-          from: 'grupos',
+          from: 'grupos', // Nombre de la colección de grupos
           localField: 'grupoId',
           foreignField: '_id',
           as: 'grupo'
         }
-      },
+      },    
       {
         $unwind: {
           path: '$grupo',
-          preserveNullAndEmptyArrays: true
+          preserveNullAndEmptyArrays: true // En caso de que no haya grupo relacionado
         }
       },
       {
@@ -68,17 +60,19 @@ calificacionSchema.statics.getCalificacionesByAlumno = async function(alumnoId) 
           calificacion: 1,
           grupoId: 1,
           alumnoId: 1,
-          "grupo.alumnos": 1
+          "grupo.alumnos": 1 // Incluir los alumnos del grupo
         }
       },
       {
         $match: {
-          $or: [
-            { alumnoId: new mongoose.Types.ObjectId(alumnoId) },
-            { "grupo.alumnos": new mongoose.Types.ObjectId(alumnoId) }
-          ]
+           alumnoId: new mongoose.Types.ObjectId(alumnoId),  
+            // Calificaciones individuales
+          
+          
         }
       }
+
+     
     ]);
 
     return calificaciones;
