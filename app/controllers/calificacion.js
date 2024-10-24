@@ -103,7 +103,7 @@ exports.getCalificacionesByTpId = async (req, res) => {
   const { tpId } = req.params;
   try {
     // Encuentra todas las calificaciones que tienen un valor asignado y corresponden al TP especificado
-    const calificaciones = await Calificacion.find({ tpId, calificacion: { $ne: null } }, 'calificacion alumnoId grupoId');
+    const calificaciones = await Calificacion.find({ tpId }, 'calificacion alumnoId grupoId');
     if (!calificaciones.length) {
       return res.json([]);
     }
