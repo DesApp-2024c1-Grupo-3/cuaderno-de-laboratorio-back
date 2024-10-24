@@ -7,8 +7,8 @@ const Grupo = require("../app/models/grupo");
 const Materia = require("../app/models/materia");
 const Calificacion = require("../app/models/calificacion");
 
-const scope = "local";
-const uri = `mongodb://localhost:27017/${scope}`;
+const uri = `mongodb+srv://cesarLaboratorioUnaHur2024:H68vWPOuAhVboelP@clusterunahur.lqu9g.mongodb.net/Proyect?retryWrites=true&w=majority`;
+
 
 // Conecta a la base de datos
 mongoose

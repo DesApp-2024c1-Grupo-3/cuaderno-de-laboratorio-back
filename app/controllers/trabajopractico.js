@@ -1,6 +1,8 @@
 const model = require("../models/trabajopractico");
 const mongoose = require('mongoose');
 const Grupo = require('../models/grupo');
+const CursoModel = require("../models/curso");
+const modelProfesor = require("../models/profesor");
 
 exports.getData = async (req, res) => {
   try {
@@ -24,6 +26,58 @@ exports.insertData = async (req, res) => {
       error
     );
     res.send({ error: "Error" }, 422);
+  }
+};
+exports.insertDataBynari = async (req, res) => {
+  const profesorId = req.params.profesorId;
+  const cursoId = req.params.cursoId;
+  
+  try {
+    // Verificar si el profesor existe
+    const profesor = await modelProfesor.findById(profesorId);
+    if (!profesor) {
+      return res.status(404).json({ error: `Profesor no encontrado con ID: ${profesorId}` });
+    }
+    // Verificar si el curso pertenece al profesor
+    if (!profesor.cursos.includes(cursoId)) {
+      return res.status(403).json({ error: `El profesor no tiene acceso al curso con ID: ${cursoId}` });
+    }
+    const { nombre, fechaInicio, fechaFin, grupal, consigna } = req.body;
+
+    // Convertir 'grupos' de cadena JSON a array
+    const grupos = req.body.grupos ? JSON.parse(req.body.grupos) : [];  // Ahora tienes el array original [1, 2, 3]
+
+    // Mapea los archivos para guardarlos en formato binario
+    const archivos = req.files.map(file => ({
+      file: file.buffer,          // Datos binarios del archivo
+      fileType: file.mimetype,    // Tipo MIME del archivo
+      fileName: file.originalname // Nombre original del archivo
+    })) || [];
+    const nuevoTp = {
+
+      //file: archivos,
+      file: archivos.map(archivo => archivo.file),  // Lista de archivos en formato binario
+      fileType: archivos.map(archivo => archivo.fileType), // Tipo de archivo (MIME)
+      fileName: archivos.map(archivo => archivo.fileName), // Nombre de los archivos
+      nombre,
+      fechaInicio, 
+      fechaFin,
+      grupal,
+      consigna,
+      ...(grupal && { grupos }),  // Solo agrega grupos si es un trabajo grupal
+    
+    };
+    const response = await model.create(nuevoTp);
+      // Agregar el Trabajo Práctico al curso
+      await CursoModel.findByIdAndUpdate(
+        cursoId,
+        { $push: { tps: response._id } },
+        { new: true }
+      );
+    res.status(201).json(response);
+  } catch (error) {
+    console.log("Ocurrió un error al crear un trabajo prctico: ", error);
+    res.status(422).json({ error: "Error" });
   }
 };
 
@@ -150,13 +204,26 @@ exports.getTpId = async (req, res) => {
 exports.updateTp = async (req, res) => {
   const { tpId } = req.params;
   const updatedData = req.body;
-
+  console.log('Datos recibidos para la actualización:', updatedData);  // Verifica el contenido de los datos
+ 
   if (!mongoose.Types.ObjectId.isValid(tpId)) {
     return res.status(400).send('ID de trabajo práctico no válido');
   }
 
   try {
-    const tp = await model.findByIdAndUpdate(tpId, updatedData, { new: true });
+    const tp = await model.findByIdAndUpdate(tpId, 
+      {
+        $set: {
+          nombre: updatedData.nombre,
+          fechaInicio: updatedData.fechaInicio,
+          fechaFin: updatedData.fechaFin,
+          grupal: updatedData.grupal,
+          grupos: updatedData.grupo, 
+          consigna: updatedData.consigna,
+          cuatrimestre: updatedData.cuatrimestre,
+          estado: updatedData.estado,
+        }
+      }, { new: true });
     if (!tp) {
       return res.status(404).send('Trabajo práctico no encontrado');
     }
@@ -164,5 +231,61 @@ exports.updateTp = async (req, res) => {
   } catch (error) {
     console.error('Error al actualizar el trabajo práctico:', error);
     res.status(500).send(`Error al actualizar el trabajo práctico: ${error.message}`);
+  }
+};
+// Nueva función que contiene la lógica de actualización de los TPs sin req ni res
+const actualizarEstados = async () => {
+  const now = new Date().toISOString().slice(0, 10); // Solo la fecha actual en formato YYYY-MM-DD
+  console.log("ahora:", now)
+  // Obtener todos los trabajos prácticos
+  const tps = await model.find();
+  
+  // Inicializar un array para guardar las promesas de actualización
+  const updatePromises = [];
+
+  tps.forEach(tp => {
+    if (tp.estado === "Cerrado") {
+      // Si el estado es "Cerrado", no se hace nada
+      return;
+    }
+    
+    const fechaInicio = tp.fechaInicio.toISOString().slice(0, 10); // Solo la fecha en formato YYYY-MM-DD
+    const fechaFin = tp.fechaFin.toISOString().slice(0, 10); // Solo la fecha en formato YYYY-MM-DD
+    console.log("fechaInicio:", fechaInicio)  
+    console.log("fechaFin:", fechaFin)  
+
+    if (fechaInicio === now && tp.estado === "Futuro") {
+      // Cambiar el estado a "En marcha" si la fecha de inicio es hoy y el estado es "Futuro"
+      updatePromises.push(model.findByIdAndUpdate(tp._id, { estado: 'En marcha' }));
+    }
+
+    if (fechaFin === now && tp.estado === "En marcha") {
+      // Cambiar el estado a "En evaluación" si la fecha de fin es hoy y el estado es "En marcha"
+      updatePromises.push(model.findByIdAndUpdate(tp._id, { estado: 'En evaluacion' }));
+    }
+  });
+
+  // Esperar que todas las promesas de actualización se completen
+  await Promise.all(updatePromises);
+};
+
+// Función para manejar la actualización desde el cron (sin req y res)
+exports.updateEstadoTpsCron = async () => {
+  try {
+    await actualizarEstados();
+    console.log("Estados de trabajos prácticos actualizados (desde cron).");
+  } catch (error) {
+    console.error('Error actualizando los estados desde el cron:', error);
+  }
+};
+
+// Función para manejar la actualización desde un endpoint HTTP
+exports.updateEstadoTps = async (req, res) => {
+  try {
+    await actualizarEstados();
+    res.status(200).json({ message: "Estados de trabajos prácticos actualizados." });
+  } catch (error) {
+    console.error('Error actualizando los estados:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };

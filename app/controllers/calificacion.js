@@ -3,11 +3,24 @@ const Tp = require("../models/trabajopractico");
 
 exports.insertData = async (req, res) => {
   try {
-    const { comentarioAlum, devolucionProf, calificacion, calificado, tpId, alumnoId, grupoId } = req.body;
-    const archivos = req.files.map(file => file.filename);
+    // Verificar si hay archivos subidos
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: 'No se subió ningún archivo' });
+    }
 
+    const { comentarioAlum, devolucionProf, calificacion, tpId, alumnoId, grupoId } = req.body;
+    
+    // Mapea los archivos para guardarlos en formato binario
+    const archivos = req.files.map(file => ({
+      file: file.buffer,          // Datos binarios del archivo
+      fileType: file.mimetype,    // Tipo MIME del archivo
+      fileName: file.originalname // Nombre original del archivo
+    }));
     const calificacionData = {
-      file: archivos,
+      //file: archivos,
+      file: archivos.map(archivo => archivo.file),  // Lista de archivos en formato binario
+      fileType: archivos.map(archivo => archivo.fileType), // Tipo de archivo (MIME)
+      fileName: archivos.map(archivo => archivo.fileName), // Nombre de los archivos
       comentarioAlum,
       devolucionProf,
       calificacion: calificacion ? Number(calificacion) : null,
@@ -91,7 +104,7 @@ exports.getCalificacionesByTpId = async (req, res) => {
   const { tpId } = req.params;
   try {
     // Encuentra todas las calificaciones que tienen un valor asignado y corresponden al TP especificado
-    const calificaciones = await Calificacion.find({ tpId, calificacion: { $ne: null } }, 'calificacion alumnoId grupoId');
+    const calificaciones = await Calificacion.find({ tpId }, 'calificacion alumnoId grupoId');
     if (!calificaciones.length) {
       return res.json([]);
     }

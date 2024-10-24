@@ -1,6 +1,6 @@
 const model = require("../models/alumno");
 
-const CursoModel = require("../models/curso");
+
 exports.getData = async (req, res) => {
   try {
     const arrayAlumno = await model.find();
@@ -48,6 +48,21 @@ exports.getCursosByAlumnoId = async (req, res) => {
     res.status(404).json({ error: `Error al obtener los cursos del Alumno ${alumnoId}` });
   }
 };
+//------------------------------------
+
+exports.getCursosByAlumnoIdWithAgreggate = async (req, res) => {
+  const alumnoId = req.params.alumnoId;
+  console.log("Intentando obtener cursos para el alumno:", alumnoId);
+  try {
+    const cursos = await model.getCursosByAlumno(alumnoId);  // Llama al método estático
+    res.json({cursos});  // Devuelve los cursos en formato JSON
+  } catch (error) {
+    console.error('Error al obtener los cursos del alumno:', error);
+    res.status(500).json({ error: 'Error al obtener los cursos del alumno' });
+  }
+};
+
+//--------------------------------
 exports.getAlumnoById = async (req, res) => {
   const alumnoId = req.params.alumnoId;
   try {
