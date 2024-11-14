@@ -68,12 +68,12 @@ exports.insertDataBynari = async (req, res) => {
     
     };
     const response = await model.create(nuevoTp);
-      // Agregar el Trabajo Práctico al curso
-      await CursoModel.findByIdAndUpdate(
-        cursoId,
-        { $push: { tps: response._id } },
-        { new: true }
-      );
+    // Agregar el Trabajo Práctico al curso
+    await CursoModel.findByIdAndUpdate(
+      cursoId,
+      { $push: { tps: response._id } },
+      { new: true }
+    );
     res.status(201).json(response);
   } catch (error) {
     console.log("Ocurrió un error al crear un trabajo prctico: ", error);
