@@ -1,27 +1,61 @@
-# Cuaderno de Laboratorio - Guía de Inicio Rápido 
+# Cuaderno de Laboratorio - Guía de Inicio Rápido - Backend
 
-## Antes de comenzar es necesario:
+## **Requisitos previos**
 
-1. [Instalar servidor de mongoDB](https://www.mongodb.com/try/download/community) para poder ejecutar la base de datos localmente.
-2. [Instalar MongoDB Compass](https://www.mongodb.com/try/download/compass) herramienta gráfica oficial proporcionada por MongoDB para interactuar con bases de datos.
+1. **Node.js** (versión < 18)  
+   Descárgalo desde [Node.js Official Website](https://nodejs.org/).
 
-## Instala las dependencias Node del proyecto.
+2. **MongoDB**  
+   Instálalo siguiendo las instrucciones en [MongoDB Official Website](https://www.mongodb.com/).
+
+3. **Docker y Docker Compose**  
+   Instálalos desde [Docker Official Website](https://www.docker.com/).
+
+---
+
+## **Pasos para el despliegue**
+
+### 1. Clonar el repositorio del backend
+
+Navegar al directorio donde va a estar el backend y ejecutar el comando:
+
+```bash
+git clone https://github.com/DesApp-2024c1-Grupo-3/cuaderno-de-laboratorio-back.git
+```
+
+### 2. Cambiar a rama dev
+
+En el directorio donde está el backend ejecutar el comando:
+
+```bash
+git checkout dev
+```
+
+### 3. Instalar dependencias
+
+En el directorio donde está el backend ejecutar el comando:
 
 ```bash
 npm install
 ```
 
-## Si deseas insertar datos de prueba en la base de datos local, sigue estos pasos:
+### 4. iniciar servidor Backend
 
-Ejecutar el archivo insertardatosmock.js con el siguiente comando:
+En el directorio donde está el backend ejecutar el comando:
 
-```bash
-node ./config/insertardatosmock.js
-```
-
-## Levanta la aplicacion localmente.
 ```bash
 npm start
 ```
+
+---
+
+## **Adicionales**
+
+### Swagger
+
+Para consultar la documentación de la API (Swagger) acceder a la siguiente URL con el servidor backend ejecutándose:
+
+[http://localhost:8080/api-docs](http://localhost:8080/api-docs)
+
 
 
