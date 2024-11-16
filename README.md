@@ -39,7 +39,7 @@ En el directorio donde está el backend ejecutar el comando:
 npm install
 ```
 
-### 4. iniciar servidor Backend
+### 4. Iniciar servidor Backend
 
 En el directorio donde está el backend ejecutar el comando:
 
