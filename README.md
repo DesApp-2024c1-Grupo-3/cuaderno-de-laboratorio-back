@@ -25,7 +25,7 @@ git clone https://github.com/DesApp-2024c1-Grupo-3/cuaderno-de-laboratorio-back.
 
 ### 2. Cambiar a rama dev
 
-En el directorio donde está el backend ejecutar el comando:
+En el directorio raíz donde está el backend ejecutar el comando:
 
 ```bash
 git checkout dev
@@ -33,7 +33,7 @@ git checkout dev
 
 ### 3. Instalar dependencias
 
-En el directorio donde está el backend ejecutar el comando:
+En el directorio raíz donde está el backend ejecutar el comando:
 
 ```bash
 npm install
@@ -41,7 +41,7 @@ npm install
 
 ### 4. Iniciar servidor Backend
 
-En el directorio donde está el backend ejecutar el comando:
+En el directorio raíz donde está el backend ejecutar el comando:
 
 ```bash
 npm start
