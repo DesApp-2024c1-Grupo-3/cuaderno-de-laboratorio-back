@@ -5,11 +5,6 @@
 1. **Node.js** (versión < 18)  
    Descárgalo desde [Node.js Official Website](https://nodejs.org/).
 
-2. **MongoDB**  
-   Instálalo siguiendo las instrucciones en [MongoDB Official Website](https://www.mongodb.com/).
-
-3. **Docker y Docker Compose**  
-   Instálalos desde [Docker Official Website](https://www.docker.com/).
 
 ---
 
