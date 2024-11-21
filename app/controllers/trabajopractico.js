@@ -246,7 +246,7 @@ const determinarEstado = (fechaInicio, fechaFin) => {
   } else if (hoy >= inicio && hoy <= fin) {
       return 'En marcha';
   } else if (hoy > fin) {
-      return 'Cerrado';
+      return 'En evaluacion';
   }
 
   return 'Futuro'; // Estado predeterminado
