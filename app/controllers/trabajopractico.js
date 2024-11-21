@@ -17,69 +17,102 @@ exports.getData = async (req, res) => {
 exports.insertData = async (req, res) => {
   try {
     const data = req.body;
+
+    // Calcular estado inicial
+    const now = new Date();
+    let estado = "Futuro";
+
+    if (data.fechaInicio && data.fechaFin) {
+      const fechaInicio = new Date(data.fechaInicio);
+      const fechaFin = new Date(data.fechaFin);
+
+      if (now >= fechaInicio && now <= fechaFin) {
+        estado = "En marcha";
+      } else if (now > fechaFin) {
+        estado = "En evaluacion";
+      }
+    }
+
+    // Agregar el estado calculado a los datos
+    data.estado = estado;
+
     console.log(data);
     const response = await model.create(data);
     res.status(201).json(response);
   } catch (error) {
-    console.log(
-      "Ocurrio un error al insertar un elemento en la tabla TrabajoPractico: ",
+    console.error(
+      "Ocurrió un error al insertar un elemento en la tabla TrabajoPractico: ",
       error
     );
-    res.send({ error: "Error" }, 422);
+    res.status(422).json({ error: "Error" });
   }
 };
+
 exports.insertDataBynari = async (req, res) => {
   const profesorId = req.params.profesorId;
   const cursoId = req.params.cursoId;
-  
+
   try {
-    // Verificar si el profesor existe
     const profesor = await modelProfesor.findById(profesorId);
     if (!profesor) {
       return res.status(404).json({ error: `Profesor no encontrado con ID: ${profesorId}` });
     }
-    // Verificar si el curso pertenece al profesor
     if (!profesor.cursos.includes(cursoId)) {
       return res.status(403).json({ error: `El profesor no tiene acceso al curso con ID: ${cursoId}` });
     }
+
     const { nombre, fechaInicio, fechaFin, grupal, consigna } = req.body;
 
-    // Convertir 'grupos' de cadena JSON a array
-    const grupos = req.body.grupos ? JSON.parse(req.body.grupos) : [];  // Ahora tienes el array original [1, 2, 3]
+    const grupos = req.body.grupos ? JSON.parse(req.body.grupos) : [];
 
-    // Mapea los archivos para guardarlos en formato binario
     const archivos = req.files.map(file => ({
-      file: file.buffer,          // Datos binarios del archivo
-      fileType: file.mimetype,    // Tipo MIME del archivo
-      fileName: file.originalname // Nombre original del archivo
+      file: file.buffer,
+      fileType: file.mimetype,
+      fileName: file.originalname,
     })) || [];
-    const nuevoTp = {
 
-      //file: archivos,
-      file: archivos.map(archivo => archivo.file),  // Lista de archivos en formato binario
-      fileType: archivos.map(archivo => archivo.fileType), // Tipo de archivo (MIME)
-      fileName: archivos.map(archivo => archivo.fileName), // Nombre de los archivos
+    // Calcular estado inicial
+    const now = new Date();
+    let estado = "Futuro";
+
+    if (fechaInicio && fechaFin) {
+      const fechaInicioDate = new Date(fechaInicio);
+      const fechaFinDate = new Date(fechaFin);
+
+      if (now >= fechaInicioDate && now <= fechaFinDate) {
+        estado = "En marcha";
+      } else if (now > fechaFinDate) {
+        estado = "En evaluacion";
+      }
+    }
+
+    const nuevoTp = {
+      file: archivos.map(archivo => archivo.file),
+      fileType: archivos.map(archivo => archivo.fileType),
+      fileName: archivos.map(archivo => archivo.fileName),
       nombre,
-      fechaInicio, 
+      fechaInicio,
       fechaFin,
       grupal,
       consigna,
-      ...(grupal && { grupos }),  // Solo agrega grupos si es un trabajo grupal
-    
+      estado, // Estado inicial calculado
+      ...(grupal && { grupos }),
     };
+
     const response = await model.create(nuevoTp);
-      // Agregar el Trabajo Práctico al curso
-      await CursoModel.findByIdAndUpdate(
-        cursoId,
-        { $push: { tps: response._id } },
-        { new: true }
-      );
+    await CursoModel.findByIdAndUpdate(
+      cursoId,
+      { $push: { tps: response._id } },
+      { new: true }
+    );
+
     res.status(201).json(response);
   } catch (error) {
-    console.log("Ocurrió un error al crear un trabajo prctico: ", error);
+    console.error("Ocurrió un error al crear un trabajo práctico: ", error);
     res.status(422).json({ error: "Error" });
   }
 };
+
 
 // Obtener grupos de un trabajo practico por su ID
 exports.getGruposByTpId = async (req, res) => {
@@ -201,37 +234,53 @@ exports.getTpId = async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
-exports.updateTp = async (req, res) => {
-  const { tpId } = req.params;
-  const updatedData = req.body;
-  console.log('Datos recibidos para la actualización:', updatedData);  // Verifica el contenido de los datos
- 
-  if (!mongoose.Types.ObjectId.isValid(tpId)) {
-    return res.status(400).send('ID de trabajo práctico no válido');
+
+// Función para calcular el estado
+const determinarEstado = (fechaInicio, fechaFin) => {
+  const hoy = new Date();
+  const inicio = new Date(fechaInicio);
+  const fin = new Date(fechaFin);
+
+  if (hoy < inicio) {
+      return 'Futuro';
+  } else if (hoy >= inicio && hoy <= fin) {
+      return 'En marcha';
+  } else if (hoy > fin) {
+      return 'Cerrado';
   }
 
+  return 'Futuro'; // Estado predeterminado
+};
+
+exports.updateTp = async (req, res) => {
   try {
-    const tp = await model.findByIdAndUpdate(tpId, 
-      {
-        $set: {
-          nombre: updatedData.nombre,
-          fechaInicio: updatedData.fechaInicio,
-          fechaFin: updatedData.fechaFin,
-          grupal: updatedData.grupal,
-          grupos: updatedData.grupo, 
-          consigna: updatedData.consigna,
-          cuatrimestre: updatedData.cuatrimestre,
-          estado: updatedData.estado,
-        }
-      }, { new: true });
-    if (!tp) {
-      return res.status(404).send('Trabajo práctico no encontrado');
+    const { tpId } = req.params;
+    const { nombre, fechaInicio, fechaFin, grupal, grupo, consigna, cuatrimestre } = req.body;
+
+    // Validación de fechas
+    if (new Date(fechaInicio) > new Date(fechaFin)) {
+        return res.status(400).json({ message: 'La fecha de inicio no puede ser posterior a la fecha de fin' });
     }
-    res.status(200).json({ message: "Tp modificado exitosamente", tpId });
-  } catch (error) {
-    console.error('Error al actualizar el trabajo práctico:', error);
-    res.status(500).send(`Error al actualizar el trabajo práctico: ${error.message}`);
-  }
+
+    // Calcular el nuevo estado
+    const estado = determinarEstado(fechaInicio, fechaFin);
+
+    // Actualizar el TP en la base de datos
+    const actualizado = await model.findByIdAndUpdate(
+        tpId,
+        { nombre, fechaInicio, fechaFin, grupal, grupo, consigna, cuatrimestre, estado },
+        { new: true } // Retorna el documento actualizado
+    );
+
+    if (!actualizado) {
+        return res.status(404).json({ message: 'TP no encontrado' });
+    }
+
+      return res.status(200).json({ message: 'TP actualizado', tp: actualizado });
+    } catch (error) {
+      console.error('Error actualizando TP:', error);
+      return res.status(500).json({ message: 'Error al actualizar el TP' });
+    }
 };
 // Nueva función que contiene la lógica de actualización de los TPs sin req ni res
 const actualizarEstados = async () => {
