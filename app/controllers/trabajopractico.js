@@ -5,13 +5,6 @@ const CursoModel = require("../models/curso");
 const modelProfesor = require("../models/profesor");
 
 exports.getData = async (req, res) => {
-  try {
-    const arrayTps = await model.find();
-    console.log(arrayTps);
-    res.send({ arrayTps });
-  } catch (error) {
-    console.log(`Ocurrio un error: ${error}`);
-  }
 };
 
 exports.insertData = async (req, res) => {
@@ -255,33 +248,37 @@ const determinarEstado = (fechaInicio, fechaFin) => {
 exports.updateTp = async (req, res) => {
   try {
     const { tpId } = req.params;
-    const { nombre, fechaInicio, fechaFin, grupal, grupo, consigna, cuatrimestre } = req.body;
+    const { nombre, fechaInicio, fechaFin, grupal, grupo, consigna, cuatrimestre, estado: estadoBody } = req.body;
 
     // Validación de fechas
-    if (new Date(fechaInicio) > new Date(fechaFin)) {
-        return res.status(400).json({ message: 'La fecha de inicio no puede ser posterior a la fecha de fin' });
+    if (fechaInicio && fechaFin && new Date(fechaInicio) > new Date(fechaFin)) {
+      return res.status(400).json({ message: 'La fecha de inicio no puede ser posterior a la fecha de fin' });
     }
 
-    // Calcular el nuevo estado
-    const estado = determinarEstado(fechaInicio, fechaFin);
+    // Determinar el estado
+    let estado = estadoBody; // Usar el estado proporcionado en el cuerpo
+    if (estadoBody !== "Cerrado") {
+      estado = determinarEstado(fechaInicio, fechaFin);
+    }
 
     // Actualizar el TP en la base de datos
     const actualizado = await model.findByIdAndUpdate(
-        tpId,
-        { nombre, fechaInicio, fechaFin, grupal, grupo, consigna, cuatrimestre, estado },
-        { new: true } // Retorna el documento actualizado
+      tpId,
+      { nombre, fechaInicio, fechaFin, grupal, grupo, consigna, cuatrimestre, estado },
+      { new: true } // Retorna el documento actualizado
     );
 
     if (!actualizado) {
-        return res.status(404).json({ message: 'TP no encontrado' });
+      return res.status(404).json({ message: 'TP no encontrado' });
     }
 
-      return res.status(200).json({ message: 'TP actualizado', tp: actualizado });
-    } catch (error) {
-      console.error('Error actualizando TP:', error);
-      return res.status(500).json({ message: 'Error al actualizar el TP' });
-    }
+    return res.status(200).json({ message: 'TP actualizado', tp: actualizado });
+  } catch (error) {
+    console.error('Error actualizando TP:', error);
+    return res.status(500).json({ message: 'Error al actualizar el TP' });
+  }
 };
+
 // Nueva función que contiene la lógica de actualización de los TPs sin req ni res
 const actualizarEstados = async () => {
   const now = new Date().toISOString().slice(0, 10); // Solo la fecha actual en formato YYYY-MM-DD
