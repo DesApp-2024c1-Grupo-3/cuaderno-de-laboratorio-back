@@ -37,7 +37,15 @@ En el directorio raíz donde está el backend ejecutar el comando:
 npm install
 ```
 
-### 4. Iniciar servidor Backend
+### 4. Configurar archivo de variables de ambiente
+
+En el directorio raíz donde está el frontend ejecutar el comando:
+
+```bash
+cp .env.example .env
+```
+
+### 5. Iniciar servidor Backend
 
 En el directorio raíz donde está el backend ejecutar el comando:
 
