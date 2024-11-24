@@ -5,6 +5,9 @@
 1. **Node.js** (versión < 18)  
    Descárgalo desde [Node.js Official Website](https://nodejs.org/).
 
+2. **MongoDB (para DB local)**  
+   Instálalo siguiendo las instrucciones en [MongoDB Official Website](https://www.mongodb.com/).
+
 
 ---
 
