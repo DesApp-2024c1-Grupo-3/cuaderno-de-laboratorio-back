@@ -55,6 +55,22 @@ npm start
 
 ---
 
+## **Creacion y seleccion de Base de datos **
+
+## Creacion de DB Local
+
+asdasd
+
+## Creacion de DB Remoto
+
+asdasd
+
+## Seleccion de DB
+
+asdasd
+
+---
+
 ## **Adicionales**
 
 ### Swagger
@@ -62,6 +78,4 @@ npm start
 Para consultar la documentación de la API (Swagger) acceder a la siguiente URL con el servidor backend ejecutándose:
 
 [http://localhost:8080/api-docs](http://localhost:8080/api-docs)
-
-
 
