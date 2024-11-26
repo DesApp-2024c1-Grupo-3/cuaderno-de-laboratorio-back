@@ -5,6 +5,9 @@
 1. **Node.js** (versión < 18)  
    Descárgalo desde [Node.js Official Website](https://nodejs.org/).
 
+2. **MongoDB (para DB local)**  
+   Instálalo siguiendo las instrucciones en [MongoDB Official Website](https://www.mongodb.com/).
+
 
 ---
 
@@ -34,13 +37,37 @@ En el directorio raíz donde está el backend ejecutar el comando:
 npm install
 ```
 
-### 4. Iniciar servidor Backend
+### 4. Configurar archivo de variables de ambiente
+
+En el directorio raíz donde está el frontend ejecutar el comando:
+
+```bash
+cp .env.example .env
+```
+
+### 5. Iniciar servidor Backend
 
 En el directorio raíz donde está el backend ejecutar el comando:
 
 ```bash
 npm start
 ```
+
+---
+
+## **Creacion y seleccion de Base de datos **
+
+## Creacion de DB Local
+
+asdasd
+
+## Creacion de DB Remoto
+
+asdasd
+
+## Seleccion de DB
+
+asdasd
 
 ---
 
@@ -51,6 +78,4 @@ npm start
 Para consultar la documentación de la API (Swagger) acceder a la siguiente URL con el servidor backend ejecutándose:
 
 [http://localhost:8080/api-docs](http://localhost:8080/api-docs)
-
-
 
