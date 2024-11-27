@@ -6,7 +6,7 @@ const Alumno = require("../app/models/alumno");
 const Grupo = require("../app/models/grupo");
 const Materia = require("../app/models/materia");
 const Calificacion = require("../app/models/calificacion");
-const uri = require('./db.js');
+const uri = require('./db');
 
 
 // Conecta a la base de datos

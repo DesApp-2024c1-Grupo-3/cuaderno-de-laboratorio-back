@@ -86,7 +86,13 @@ Para ello:
 
 ### DB Remoto
 
-Con la cuenta creada:
+* Copia las variables de entorno necesarias para interactuar con la BD Cloud.
+
+```bash
+cp .env.example .env
+```
+
+Con la cuenta de MongoDB Atlas creada:
 
 * Crear un cluster **FREE**.
 

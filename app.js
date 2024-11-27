@@ -6,7 +6,7 @@ const path = require('path');
 require('./config/cron');
 
 const app = express();
-const initDb = require("./config/db");
+const { initDb } = require('./config/db');
 const session = require('express-session');
 const moment = require("moment-timezone");
 
@@ -22,6 +22,7 @@ const calificacionRouter = require('./app/routes/calificacion');
 const materiaRouter = require('./app/routes/materia');
 
 const setupSwaggerDocs = require('./config/swaggerConfig');
+const { db } = require("./app/models/trabajopractico");
 
 const port = "8080";
 

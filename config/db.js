@@ -29,5 +29,8 @@ const initDb = () => {
   });
 };
 
-module.exports = initDb;
-module.exports = uri;
+module.exports = {
+  initDb,
+  uri
+};
+
