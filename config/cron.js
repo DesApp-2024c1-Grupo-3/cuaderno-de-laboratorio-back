@@ -1,12 +1,11 @@
 const cron = require("node-cron");
+const moment = require("moment-timezone")
 const controller = require("../app/controllers/trabajopractico");
 // Ejemplo de un cron job que corre cada minuto
-<<<<<<< HEAD
+
 cron.schedule('* * * * *', async () => {
-=======
-cron.schedule('*/1 * * * *', async () => {
->>>>>>> b497123c00e17dcb3099bf0d20de3ececdccc6ab
-  console.log(`Cron ejecutado a las: ${new Date().toISOString()}`);
+  const localTime = moment().tz('America/Argentina/Buenos_Aires').format('HH:mm');
+  console.log(`Cron ejecutado a las: ${localTime} hora local.`);
   try {
     // Asegúrate de llamar a la función que no necesita req y res
     await controller.updateEstadoTpsCron();

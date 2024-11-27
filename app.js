@@ -8,6 +8,10 @@ require('./config/cron');
 const app = express();
 const initDb = require("./config/db");
 const session = require('express-session');
+const moment = require("moment-timezone");
+
+// Configurar la zona horaria global
+moment.tz.setDefault("America/Argentina/Buenos_Aires");
 
 const profesorRouter = require('./app/routes/profesor');
 const alumnoRouter = require('./app/routes/alumno');
