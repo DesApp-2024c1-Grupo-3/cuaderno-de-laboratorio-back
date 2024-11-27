@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const Grupo = require('../models/grupo');
 const CursoModel = require("../models/curso");
 const modelProfesor = require("../models/profesor");
+const moment = require("moment-timezone");
+
+// Configurar la zona horaria global
+moment.tz.setDefault("America/Argentina/Buenos_Aires");
 
 exports.getData = async (req, res) => {
 };
@@ -281,8 +285,9 @@ exports.updateTp = async (req, res) => {
 
 // Nueva función que contiene la lógica de actualización de los TPs sin req ni res
 const actualizarEstados = async () => {
+  const ahora = moment().tz('America/Argentina/Buenos_Aires').format('YYYY-MM-DD'); // Fecha local en formato YYYY-MM-DD
   const now = new Date().toISOString().slice(0, 10); // Solo la fecha actual en formato YYYY-MM-DD
-  console.log("ahora:", now)
+  console.log("ahora:", ahora)
   // Obtener todos los trabajos prácticos
   const tps = await model.find();
   
@@ -300,12 +305,12 @@ const actualizarEstados = async () => {
     console.log("fechaInicio:", fechaInicio)  
     console.log("fechaFin:", fechaFin)  
 
-    if (fechaInicio === now && tp.estado === "Futuro") {
+    if (fechaInicio === ahora && tp.estado === "Futuro") {
       // Cambiar el estado a "En marcha" si la fecha de inicio es hoy y el estado es "Futuro"
       updatePromises.push(model.findByIdAndUpdate(tp._id, { estado: 'En marcha' }));
     }
 
-    if (fechaFin === now && tp.estado === "En marcha") {
+    if (fechaFin === ahora && tp.estado === "En marcha") {
       // Cambiar el estado a "En evaluación" si la fecha de fin es hoy y el estado es "En marcha"
       updatePromises.push(model.findByIdAndUpdate(tp._id, { estado: 'En evaluacion' }));
     }
