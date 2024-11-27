@@ -3,11 +3,27 @@
 ## **Requisitos previos**
 
 1. **Node.js** (versión < 18)  
-   Descárgalo desde [Node.js Official Website](https://nodejs.org/).
 
-2. **MongoDB (para DB local)**  
-   Instálalo siguiendo las instrucciones en [MongoDB Official Website](https://www.mongodb.com/).
+   Instálalo siguiendo las instrucciones en [Node.js Official Website](https://nodejs.org/).
 
+2. **MongoDB (DB local)**  
+
+   Servidor local de MongoDB.
+   Instálalo siguiendo las instrucciones en [MongoDB Official Website MongoDB community](https://www.mongodb.com/try/download/community).
+
+3. **MongoDB Atlas (DB Cloud)**
+
+   Servicio remoto de base de datos de MongoDB.
+   Crearse una cuenta en [MongoDB Official Website MongoDB Atlas](https://www.mongodb.com/es/atlas).
+
+4. **Mongo compass**
+
+   Herramienta gráfica oficial proporcionada por MongoDB para interactuar con bases de datos.
+   Con la instalación del servidor local de MongoDB ya se instala esta aplicación.
+
+   También sirve para interactuar con MongoDB Atlas.
+
+   Instálalo siguiendo las instrucciones en [MongoDB Official Website MongoDB compass](https://www.mongodb.com/try/download/compass).
 
 ---
 
@@ -37,13 +53,9 @@ En el directorio raíz donde está el backend ejecutar el comando:
 npm install
 ```
 
-### 4. Configurar archivo de variables de ambiente
+### 4. Configurar Base de datos.
 
-En el directorio raíz donde está el frontend ejecutar el comando:
-
-```bash
-cp .env.example .env
-```
+Según que **tipo** de Base de datos se desea utilizar, seguir las instrucciones **MÁS ABAJO**.
 
 ### 5. Iniciar servidor Backend
 
@@ -55,19 +67,94 @@ npm start
 
 ---
 
-## **Creacion y seleccion de Base de datos **
+## **Creación y selección de Base de datos**
 
-## Creacion de DB Local
+### DB Local
 
-asdasd
+Una vez instalado **MongoDB community** ya estaría corriendo la **DB** en el puerto `27017`.
+Se debe indicar a Mongoose con que base de datos **conectarse**, y finalmente insertar **datos mock**.
 
-## Creacion de DB Remoto
+Para ello:
 
-asdasd
+* Descomentar `const uri` correspondiente a la DB Local en el archivo `config\db.js`.
 
-## Seleccion de DB
+* En el directorio raíz donde está el backend ejecutar el comando:
 
-asdasd
+   ```bash
+   node .\config\insertarDatosMock.js
+   ```
+
+### DB Remoto
+
+Con la cuenta creada:
+
+* Crear un cluster **FREE**.
+
+* Nombrar cluster.
+
+* Seleccionar región (Recomendado Sao Paulo).
+
+* Destildar opción **Preload sample dataset**.
+
+![Create_Cluster](assets/createCluster.png)
+
+* Copiar a archivo `.env` **USER_NAME** y **DB_PASSWORD**.
+
+![User_Password](assets/userPassword.png)
+
+* Haz clic en el botón **Create Database User**.
+
+* Haz clic en el botón **Choose a connection method**.
+
+* Conectar al cluster con la opción **MongoDB for VS Code**.
+
+![Connection_Method](assets/connectionMethod.png)
+
+* Copiar a archivo `.env` **CLUSTER_NAME**.
+
+![Cluster_Name](assets/clusterName.png)
+
+* Haz clic en el botón **Done**.
+
+* Ir a la pestaña **Network Access**.
+
+* Haz clic en el botón **Add ip address**.
+
+![Network_Access](assets/networkAccess.png)
+
+* Haz clic en el botón **Allow access from anywhere**.
+
+* Haz clic en el botón **Confirm**.
+
+![Allow_All_Ip](assets/allowAllIp.png)
+
+* Ir a la pestaña **Overview**.
+
+* Haz clic en el botón **Add data**.
+
+![Overview](assets/overview.png)
+
+* Haz clic en el botón **Create Database on Atlas**.
+
+![Create_Database_Atlas](assets/createDatabaseAtlas.png)
+
+* Nombrar Base de datos.
+
+* Nombrar colección inicial (obligatorio, sin uso).
+
+* Copiar a archivo `.env` **DATABASE_NAME**.
+
+* Haz clic en el botón **Create Database**.
+
+![Create_Database](assets/createDatabase.png)
+
+* Descomentar `const uri` correspondiente a la DB Cloud en el archivo `config\db.js`.
+
+* En el directorio raíz donde está el backend ejecutar el comando:
+
+   ```bash
+   node .\config\insertarDatosMock.js
+   ```
 
 ---
 

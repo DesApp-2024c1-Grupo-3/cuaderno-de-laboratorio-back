@@ -6,8 +6,7 @@ const Alumno = require("../app/models/alumno");
 const Grupo = require("../app/models/grupo");
 const Materia = require("../app/models/materia");
 const Calificacion = require("../app/models/calificacion");
-
-const uri = `mongodb+srv://cesarLaboratorioUnaHur2024:H68vWPOuAhVboelP@clusterunahur.lqu9g.mongodb.net/Proyect?retryWrites=true&w=majority`;
+const uri = require('./db.js');
 
 
 // Conecta a la base de datos

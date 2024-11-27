@@ -2,12 +2,17 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-//En esta linea se selecciona la DB a trabajar.
+//En esta sección se selecciona la DB a trabajar.
 
-//Cloud
+//--CLOUD--
+//Valores tomados del .env
+//const uri=`mongodb+srv://${encodeURIComponent(process.env.USER_NAME)}:${encodeURIComponent(process.env.DB_PASSWORD)}@${encodeURIComponent(process.env.CLUSTER_NAME)}.mongodb.net/${encodeURIComponent(process.env.DATABASE_NAME)}?retryWrites=true&w=majority`;
+
+// proyecto actual -> BORRAR AL PASR A MASTER
 const uri = `mongodb+srv://cesaraugustopacheco:${encodeURIComponent(process.env.DB_PASSWORD)}@clusterunahur.lqu9g.mongodb.net/Proyect?retryWrites=true&w=majority`;
+// BORRAR AL PASAR A MASTER
 
-//Local
+//--LOCAL--
 //const uri = `mongodb://localhost:27017/"local"`;
 
 
@@ -25,3 +30,4 @@ const initDb = () => {
 };
 
 module.exports = initDb;
+module.exports = uri;
