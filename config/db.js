@@ -23,9 +23,9 @@ const initDb = () => {
     useUnifiedTopology: true,
     maxPoolSize: 10, // Opcional, para configurar el pool de conexiones
   }).then(() => {
-    console.log("Conexión exitosa a MongoDB Atlas con Mongoose");
+    console.log("Conexión exitosa");
   }).catch(err => {
-    console.error("Error conectando a MongoDB Atlas:", err.message);
+    console.error("Error conectando:", err.message);
   });
 };
 
