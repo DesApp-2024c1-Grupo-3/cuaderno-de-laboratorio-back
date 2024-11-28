@@ -57,7 +57,7 @@ npm install
 
 ### 4. Configurar Base de datos.
 
-Se deja por defecto una DB creada y funcionando.
+Se deja por defecto una DB creada y funcionando, que funciona con las variables del archivo `.env.example`.
 
 * Copia las variables de entorno necesarias para interactuar con la BD Cloud.
 
@@ -65,7 +65,7 @@ Se deja por defecto una DB creada y funcionando.
 cp .env.example .env
 ```
 
-Si se desea crear una **DB nueva**, o utilizar una **DB en local**, realizar las instrucciones indicadas al final de este instructivo. (Ver seccion **Creación y selección de Base de datos**)
+> Si se desea crear una **DB nueva**, o utilizar una **DB en local**, seguir las indicaciones mencionadas al final de este instructivo. (Ver sección **Creación y selección de Base de datos**)
 
 ### 5. Iniciar servidor Backend
 
@@ -81,12 +81,14 @@ npm start
 
 ### DB Local
 
-Una vez instalado **MongoDB community** ya estaría corriendo la **DB** en el puerto `27017`.
+Una vez instalado **MongoDB community** ya estaría funcionando la **DB** en el puerto `27017`.
 Se debe indicar a Mongoose con que base de datos **conectarse**, y finalmente insertar **datos mock**.
 
 Para ello:
 
 * Descomentar `const uri` correspondiente a la DB Local en el archivo `config\db.js`.
+
+* Comentar `const uri` correspondiente a la DB Cloud en el archivo `config\db.js`.
 
 * En el directorio raíz donde está el backend ejecutar el comando:
 
@@ -96,7 +98,7 @@ Para ello:
 
 ### DB Remoto
 
-> La base de datos remota es unica, y todos los integrantes del grupo tiene acceso a la misma. Por lo que **cualquier cambio** se vera reflejado para **todos los integrantes** del grupo.
+> La base de datos remota es única, y todos los integrantes del grupo tienen acceso a la misma. Por lo que **cualquier cambio** se verá reflejado para **todos los integrantes** del grupo.
 
 * Copia las variables de entorno necesarias para interactuar con la BD Cloud.
 
