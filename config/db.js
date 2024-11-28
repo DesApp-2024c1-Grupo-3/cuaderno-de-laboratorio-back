@@ -30,4 +30,4 @@ const initDb = () => {
 };
 
 module.exports = initDb;
-module.exports = uri;
+
