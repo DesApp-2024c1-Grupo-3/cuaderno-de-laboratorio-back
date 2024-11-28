@@ -6,17 +6,19 @@
 
    Instálalo siguiendo las instrucciones en [Node.js Official Website](https://nodejs.org/).
 
-2. **MongoDB (DB local)**  
-
-   Servidor local de MongoDB.
-   Instálalo siguiendo las instrucciones en [MongoDB Official Website MongoDB community](https://www.mongodb.com/try/download/community).
-
-3. **MongoDB Atlas (DB Cloud)**
+2. **MongoDB Atlas (DB Cloud) _RECOMENDADO_**
 
    Servicio remoto de base de datos de MongoDB.
    Crearse una cuenta en [MongoDB Official Website MongoDB Atlas](https://www.mongodb.com/es/atlas).
 
-4. **Mongo compass**
+3. **MongoDB (DB local) _OPCIONAL_**  
+
+   Servidor local de MongoDB.
+   Recomendado para hacer pruebas en local.
+
+   Instálalo siguiendo las instrucciones en [MongoDB Official Website MongoDB community](https://www.mongodb.com/try/download/community).
+
+4. **Mongo compass _OPCIONAL_**
 
    Herramienta gráfica oficial proporcionada por MongoDB para interactuar con bases de datos.
    Con la instalación del servidor local de MongoDB ya se instala esta aplicación.
@@ -55,7 +57,15 @@ npm install
 
 ### 4. Configurar Base de datos.
 
-Según que **tipo** de Base de datos se desea utilizar, seguir las instrucciones **MÁS ABAJO**.
+Se deja por defecto una DB creada y funcionando, que funciona con las variables del archivo `.env.example`.
+
+* Copia las variables de entorno necesarias para interactuar con la BD Cloud.
+
+```bash
+cp .env.example .env
+```
+
+> Si se desea crear una **DB nueva**, o utilizar una **DB en local**, seguir las indicaciones mencionadas al final de este instructivo. (Ver sección **Creación y selección de Base de datos**)
 
 ### 5. Iniciar servidor Backend
 
@@ -71,12 +81,14 @@ npm start
 
 ### DB Local
 
-Una vez instalado **MongoDB community** ya estaría corriendo la **DB** en el puerto `27017`.
+Una vez instalado **MongoDB community** ya estaría funcionando la **DB** en el puerto `27017`.
 Se debe indicar a Mongoose con que base de datos **conectarse**, y finalmente insertar **datos mock**.
 
 Para ello:
 
 * Descomentar `const uri` correspondiente a la DB Local en el archivo `config\db.js`.
+
+* Comentar `const uri` correspondiente a la DB Cloud en el archivo `config\db.js`.
 
 * En el directorio raíz donde está el backend ejecutar el comando:
 
@@ -85,6 +97,8 @@ Para ello:
    ```
 
 ### DB Remoto
+
+> La base de datos remota es única, y todos los integrantes del grupo tienen acceso a la misma. Por lo que **cualquier cambio** se verá reflejado para **todos los integrantes** del grupo.
 
 * Copia las variables de entorno necesarias para interactuar con la BD Cloud.
 
@@ -154,7 +168,6 @@ Con la cuenta de MongoDB Atlas creada:
 
 ![Create_Database](assets/createDatabase.png)
 
-* Descomentar `const uri` correspondiente a la DB Cloud en el archivo `config\db.js`.
 
 * En el directorio raíz donde está el backend ejecutar el comando:
 
@@ -164,9 +177,7 @@ Con la cuenta de MongoDB Atlas creada:
 
 ---
 
-## **Adicionales**
-
-### Swagger
+## Swagger
 
 Para consultar la documentación de la API (Swagger) acceder a la siguiente URL con el servidor backend ejecutándose:
 
