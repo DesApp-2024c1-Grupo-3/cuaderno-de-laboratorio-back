@@ -3,7 +3,17 @@ const moment = require("moment-timezone")
 const controller = require("../app/controllers/trabajopractico");
 // Ejemplo de un cron job que corre cada minuto
 
-cron.schedule('* * * * *', async () => {
+cron.schedule('5 * * * *', async () => {
+
+// ┌────────────── second (optional)
+// │ ┌──────────── minute
+// │ │ ┌────────── hour
+// │ │ │ ┌──────── day of month
+// │ │ │ │ ┌────── month
+// │ │ │ │ │ ┌──── day of week
+// │ │ │ │ │ │
+// │ │ │ │ │ │
+// * * * * * *
   const localTime = moment().tz('America/Argentina/Buenos_Aires').format('HH:mm');
   console.log(`Cron ejecutado a las: ${localTime} hora local.`);
   try {
