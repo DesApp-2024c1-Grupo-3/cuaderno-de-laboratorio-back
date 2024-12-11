@@ -2,23 +2,23 @@
 
 ## **Requisitos previos**
 
-1. **Node.js** (versión < 18)  
+1. **Node.js** (versión < 18)  *OBLIGATORIO*
 
    Instálalo siguiendo las instrucciones en [Node.js Official Website](https://nodejs.org/).
 
-2. **MongoDB Atlas (DB Cloud) _RECOMENDADO_**
+2. **MongoDB Atlas (DB Cloud)** *RECOMENDADO*
 
    Servicio remoto de base de datos de MongoDB.
    Crearse una cuenta en [MongoDB Official Website MongoDB Atlas](https://www.mongodb.com/es/atlas).
 
-3. **MongoDB (DB local) _OPCIONAL_**  
+3. **MongoDB (DB local)** *OPCIONAL*  
 
    Servidor local de MongoDB.
    Recomendado para hacer pruebas en local.
 
    Instálalo siguiendo las instrucciones en [MongoDB Official Website MongoDB community](https://www.mongodb.com/try/download/community).
 
-4. **Mongo compass _OPCIONAL_**
+4. **Mongo compass** *OPCIONAL*
 
    Herramienta gráfica oficial proporcionada por MongoDB para interactuar con bases de datos.
    Con la instalación del servidor local de MongoDB ya se instala esta aplicación.
@@ -39,15 +39,7 @@ Navegar al directorio donde va a estar el backend y ejecutar el comando:
 git clone https://github.com/DesApp-2024c1-Grupo-3/cuaderno-de-laboratorio-back.git
 ```
 
-### 2. Cambiar a rama dev
-
-En el directorio raíz donde está el backend ejecutar el comando:
-
-```bash
-git checkout dev
-```
-
-### 3. Instalar dependencias
+### 2. Instalar dependencias
 
 En el directorio raíz donde está el backend ejecutar el comando:
 
@@ -55,9 +47,9 @@ En el directorio raíz donde está el backend ejecutar el comando:
 npm install
 ```
 
-### 4. Configurar Base de datos.
+### 3. Configurar Base de datos.
 
-Se deja por defecto una DB creada y funcionando, que funciona con las variables del archivo `.env.example`.
+Se deja por defecto una DB remota creada y funcionando, que funciona con las variables del archivo `.env.example`.
 
 * Copia las variables de entorno necesarias para interactuar con la BD Cloud.
 
@@ -67,13 +59,21 @@ cp .env.example .env
 
 > Si se desea crear una **DB nueva**, o utilizar una **DB en local**, seguir las indicaciones mencionadas al final de este instructivo. (Ver sección **Creación y selección de Base de datos**)
 
-### 5. Iniciar servidor Backend
+### 4. Iniciar servidor Backend
 
 En el directorio raíz donde está el backend ejecutar el comando:
 
 ```bash
 npm start
 ```
+
+---
+
+## Swagger
+
+Para consultar la documentación de la API (Swagger) acceder a la siguiente URL con el servidor backend ejecutándose:
+
+### [http://localhost:8080/api-docs](http://localhost:8080/api-docs)
 
 ---
 
@@ -175,11 +175,5 @@ Con la cuenta de MongoDB Atlas creada:
    node .\config\insertarDatosMock.js
    ```
 
----
 
-## Swagger
-
-Para consultar la documentación de la API (Swagger) acceder a la siguiente URL con el servidor backend ejecutándose:
-
-[http://localhost:8080/api-docs](http://localhost:8080/api-docs)
 
